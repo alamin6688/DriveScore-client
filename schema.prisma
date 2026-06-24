@@ -1,0 +1,356 @@
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum UploadStatus {
+  PENDING
+  UPLOADED
+  PROCESSING
+  OCR_COMPLETED
+  AI_COMPLETED
+  REPORT_READY
+  COMPLETED
+  FAILED
+}
+
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum JobStatus {
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum ReportType {
+  PNL
+  BALANCE_SHEET
+  TAX
+  VENDOR
+  EXPENSE
+  EXPORT
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  PENDING
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model User {
+  id                  String                @id @default(auto()) @map("_id") @db.ObjectId
+  email               String                @unique
+  name                String?
+  picture             String?
+  role                Role                  @default(USER)
+  status              AccountStatus         @default(ACTIVE)
+  companyName         String?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  companyProfiles     CompanyProfile[]
+  otpCodes            Otp[]
+  sessions            Session[]
+  uploads             DocumentUpload[]
+  reports             Report[]
+  vendors             Vendor[]
+  transactions        Transaction[]
+  auditLogs           AuditLog[]
+  refreshTokens       RefreshToken[]
+  subscriptions       UserSubscription[]
+  payments            PaymentTransaction[]
+  savedPaymentMethods SavedPaymentMethod[]
+}
+
+model Otp {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  code      String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  attempts  Int      @default(0)
+  ip        String?
+  createdAt DateTime @default(now())
+}
+
+model Session {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  token     String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  ip        String?
+  userAgent String?
+}
+
+model DocumentUpload {
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  user           User            @relation(fields: [userId], references: [id])
+  userId         String          @db.ObjectId
+  company        CompanyProfile? @relation(fields: [companyId], references: [id])
+  companyId      String?         @db.ObjectId
+  filename       String
+  originalName   String?
+  fileUrl        String
+  storageKey     String?
+  mimeType       String
+  size           Int?
+  status         UploadStatus    @default(PENDING)
+  errorMessage   String?
+  extractedData  Json?
+  normalizedData Json?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  reports        Report[]
+  jobs           ProcessingJob[]
+
+  @@index([userId, companyId])
+}
+
+model ProcessingJob {
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  upload       DocumentUpload @relation(fields: [uploadId], references: [id])
+  uploadId     String         @db.ObjectId
+  status       JobStatus      @default(QUEUED)
+  step         String
+  attempts     Int            @default(0)
+  errorMessage String?
+  startedAt    DateTime?
+  finishedAt   DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model Vendor {
+  id           String          @id @default(auto()) @map("_id") @db.ObjectId
+  user         User            @relation(fields: [userId], references: [id])
+  userId       String          @db.ObjectId
+  company      CompanyProfile? @relation(fields: [companyId], references: [id])
+  companyId    String?         @db.ObjectId
+  name         String
+  category     String?
+  aliases      String[]
+  metadata     Json?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  transactions Transaction[]
+
+  @@index([userId, companyId])
+}
+
+model Transaction {
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  user           User            @relation(fields: [userId], references: [id])
+  userId         String          @db.ObjectId
+  company        CompanyProfile? @relation(fields: [companyId], references: [id])
+  companyId      String?         @db.ObjectId
+  vendor         Vendor?         @relation(fields: [vendorId], references: [id])
+  vendorId       String?         @db.ObjectId
+  amount         Float?
+  type           String?
+  date           DateTime?
+  category       String?
+  description    String?
+  reference      String?
+  confidence     Float?
+  sourceUploadId String?         @db.ObjectId
+  raw            Json?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([userId, companyId])
+}
+
+model Report {
+  id         String          @id @default(auto()) @map("_id") @db.ObjectId
+  user       User            @relation(fields: [userId], references: [id])
+  userId     String          @db.ObjectId
+  company    CompanyProfile? @relation(fields: [companyId], references: [id])
+  companyId  String?         @db.ObjectId
+  upload     DocumentUpload? @relation(fields: [uploadId], references: [id])
+  uploadId   String?         @db.ObjectId
+  type       ReportType
+  title      String
+  summary    String?
+  data       Json
+  periodFrom DateTime?
+  periodTo   DateTime?
+  version    Int             @default(1)
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  history    ReportHistory[]
+  exports    ReportExport[]
+
+  @@index([userId, companyId])
+}
+
+model ReportHistory {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  report    Report   @relation(fields: [reportId], references: [id])
+  reportId  String   @db.ObjectId
+  action    String
+  details   String?
+  createdAt DateTime @default(now())
+}
+
+model ReportExport {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  report    Report   @relation(fields: [reportId], references: [id])
+  reportId  String   @db.ObjectId
+  format    String
+  fileUrl   String?
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?  @db.ObjectId
+  action    String
+  entity    String?
+  entityId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+}
+
+model RefreshToken {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model CompanyProfile {
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  user            User             @relation(fields: [userId], references: [id])
+  userId          String           @db.ObjectId
+  name            String
+  industry        String?
+  businessAddress String?
+  logoUrl         String?
+  isDefault       Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  uploads         DocumentUpload[]
+  reports         Report[]
+  vendors         Vendor[]
+  transactions    Transaction[]
+
+  @@index([userId])
+  @@index([userId, isDefault])
+}
+
+model SubscriptionPlan {
+  id                  String             @id @default(auto()) @map("_id") @db.ObjectId
+  name                String             @unique
+  description         String?
+  price               Float
+  currency            String             @default("USD")
+  interval            String             @default("month")
+  stripePriceId       String?
+  stripeProductId     String?
+  features            String[]
+  active              Boolean            @default(true)
+  maxPaymentMethods   Int?               // null = system default (5). Free=1, Pro=3, Professional=6
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  subscriptions       UserSubscription[]
+
+  @@index([active])
+}
+
+model UserSubscription {
+  id                   String               @id @default(auto()) @map("_id") @db.ObjectId
+  userId               String               @db.ObjectId
+  user                 User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId               String               @db.ObjectId
+  plan                 SubscriptionPlan     @relation(fields: [planId], references: [id])
+  status               SubscriptionStatus   @default(ACTIVE)
+  stripeSubscriptionId String?
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+  cancelledAt          DateTime?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  payments             PaymentTransaction[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+model PaymentTransaction {
+  id                    String            @id @default(auto()) @map("_id") @db.ObjectId
+  userId                String            @db.ObjectId
+  user                  User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscriptionId        String?           @db.ObjectId
+  subscription          UserSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  amount                Float
+  currency              String            @default("USD")
+  status                PaymentStatus     @default(PENDING)
+  stripePaymentIntentId String?           @unique
+  stripeInvoiceId       String?           @unique
+  description           String?
+  paymentMethod         String?
+  lastFourCardDigits    String?
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Saved Payment Methods (local mirror of Stripe PaymentMethods)
+// ─────────────────────────────────────────────────────────────────
+model SavedPaymentMethod {
+  id                    String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId                String   @db.ObjectId
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripePaymentMethodId String   @unique
+  brand                 String
+  last4                 String
+  expiryMonth           Int
+  expiryYear            Int
+  isDefault             Boolean  @default(false)
+  stripeCustomerId      String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([userId])
+  @@index([userId, isDefault])
+}
+
+enum ContactRequestStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+  REPLIED
+}
+
+model ContactRequest {
+  id        String               @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String
+  message   String
+  status    ContactRequestStatus @default(PENDING)
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+}
