@@ -47,7 +47,7 @@ const HeroSection = () => {
         </div>
 
         {/* Mockup Dashboard Image (2nd Half) */}
-        <div className="mt-16 w-full relative z-10 flex justify-center">
+        <div className="mt-16 max-w-7xl mx-auto relative z-10 flex justify-center">
           {/* Subtle Orange-Red Brand Radial Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-[#D13900]/10 rounded-full blur-3xl opacity-60 pointer-events-none -z-10" />
 

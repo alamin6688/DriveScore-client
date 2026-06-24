@@ -356,7 +356,7 @@ const OTPage = () => {
                   onChange={(e) => handleChange(e.target.value, index)}
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   inputMode="numeric"
-                  className="w-9 h-9 min-[350px]:w-10 min-[350px]:h-10 min-[400px]:w-12 min-[400px]:h-12 sm:w-14 sm:h-14 text-center text-base sm:text-xl font-bold bg-[#F8F8F6] border-gray-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400/50 focus:border-transparent transition-all px-0"
+                  className="w-9 h-9 min-[350px]:w-10 min-[350px]:h-10 min-[400px]:w-12 min-[400px]:h-12 sm:w-14 sm:h-14 text-center text-base sm:text-xl font-bold bg-white border-gray-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400/50 focus:border-transparent transition-all px-0"
                 />
               ))}
             </div>

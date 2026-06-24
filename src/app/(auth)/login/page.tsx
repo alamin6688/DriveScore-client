@@ -1,26 +1,29 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import Image from "next/image";
+
 import React, { useState } from "react";
 import Link from "next/link";
-import { useLoginUserMutation, useResendOtpMutation } from "@/service/auth/authApi";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Mail, ArrowLeft } from "lucide-react";
+import { 
+  Mail, 
+  Lock, 
+  Eye, 
+  EyeOff, 
+  ArrowRight 
+} from "lucide-react";
+import { useLoginUserMutation, useResendOtpMutation } from "@/service/auth/authApi";
 import { getApiErrorMessage } from "@/utils/getApiErrorMessage";
-
-// import leftOverlayPng from "@/assets/overlays/left-shade.png";
-// import rightOverlayPng from "@/assets/overlays/right-shade.png";
-// import leftDecorationPng from "@/assets/overlays/left-float-box.png";
-// import rightDecorationPng from "@/assets/overlays/right-float-box.png";
-import leftGlitterDecorationPng from "@/assets/overlays/glitter-effect.png";
-import logo from "@/assets/logo/logo.png";
+import logo from "@/assets/logo/logo.svg";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const [login, { isLoading }] = useLoginUserMutation();
   const [resendOtp] = useResendOtpMutation();
-
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -65,157 +68,120 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-white flex items-center justify-center overflow-hidden py-12 select-text">
+    <div className="relative w-full min-h-screen bg-[#f8f9fa] flex items-center justify-center overflow-hidden py-16 select-text">
       
-      {/* Soft Ambient Corner Glows (Gradients on left and right) */}
-      {/* <div className="absolute top-0 left-0 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-gradient-to-br from-[#4CAF50]/15 via-[#4CAF50]/3 to-transparent blur-[80px] sm:blur-[120px] pointer-events-none select-none z-0" />
-      <div className="absolute top-0 right-0 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-gradient-to-bl from-[#4CAF50]/15 via-[#4CAF50]/3 to-transparent blur-[80px] sm:blur-[120px] pointer-events-none select-none z-0" /> */}
-
-      {/* Left Pluses Decoration - Hidden on mobile */}
-      {/* <div className="absolute left-[3%] top-[30%] w-[250px] md:w-[400px] aspect-[3/4] pointer-events-none select-none z-10 opacity-100 contrast-200 hidden sm:block">
-        <Image
-          src={leftDecorationPng}
-          alt="Left Decor"
-          fill
-          className="object-contain"
-          priority
-          onError={(e) => {
-            (e.target as HTMLElement).style.display = "none";
-          }}
-        />
-      </div> */}
-
-      {/* Glitter effect decoration on top-left corner - Hidden on mobile */}
-      {/* <div className="absolute left-[3%] top-[30%] w-[250px] md:w-[400px] aspect-[3/4] pointer-events-none select-none z-10 opacity-100 contrast-200 hidden sm:block">
-        <Image
-          src={leftGlitterDecorationPng}
-          alt="Glitter Decor"
-          fill
-          className="object-contain"
-          priority
-          onError={(e) => {
-            (e.target as HTMLElement).style.display = "none";
-          }}
-        />
-      </div> */}
-
-      {/* Right Pluses Decoration - Hidden on mobile */}
-      {/* <div className="absolute right-[3%] top-[30%] w-[250px] md:w-[400px] aspect-[3/4] pointer-events-none select-none z-10 opacity-100 contrast-200 hidden sm:block">
-        <Image
-          src={rightDecorationPng}
-          alt="Right Decor"
-          fill
-          className="object-contain"
-          priority
-          onError={(e) => {
-            (e.target as HTMLElement).style.display = "none";
-          }}
-        />
-      </div> */}
-
-      {/* Bottom Left Floating Cards - Hidden on mobile */}
-      {/* <div className="absolute -left-[35%] bottom-[15%] w-[220px] md:w-[1300px] aspect-square pointer-events-none select-none z-10 opacity-80 hidden sm:block">
-        <Image
-          src={leftOverlayPng}
-          alt="Left Overlay Cards"
-          fill
-          className="object-contain"
-          priority
-          onError={(e) => {
-            (e.target as HTMLElement).style.display = "none";
-          }}
-        />
-      </div> */}
-
-      {/* Bottom Right Floating Cards - Hidden on mobile */}
-      {/* <div className="absolute -right-[35%] bottom-[15%] w-[220px] md:w-[1300px] aspect-square pointer-events-none select-none z-10 opacity-70 hidden sm:block">
-        <Image
-          src={rightOverlayPng}
-          alt="Right Overlay Cards"
-          fill
-          className="object-contain"
-          priority
-          onError={(e) => {
-            (e.target as HTMLElement).style.display = "none";
-          }}
-        />
-      </div> */}
-
       {/* Main Content Card Container */}
       <div className="relative z-20 w-full max-w-[540px] px-4">
-        <div className="bg-white rounded-[32px] p-6 sm:p-12 md:p-14 shadow-[0_8px_40px_rgba(0,0,0,0.03)] border border-gray-100/80 flex flex-col items-center relative">
+        <div className="bg-white rounded-[32px] p-8 sm:p-12 md:p-14 shadow-[0_8px_40px_rgba(0,0,0,0.02)] border border-gray-100 flex flex-col items-center">
           
-          {/* Back Button */}
-          <button
-            onClick={() => router.push("/")}
-            className="absolute left-5 top-5 sm:left-7 sm:top-7 flex items-center justify-center w-8 h-8 rounded-full border border-gray-200/60 hover:bg-gray-50 text-gray-500 hover:text-gray-800 transition-all shadow-sm hover:shadow"
-            title="Go Back"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </button>
-
-          {/* Logo */}
-          <div className="relative w-44 h-14 select-none mb-6">
+          {/* Logo Brand Container */}
+          <div className="flex items-center gap-2 mb-8 select-none">
             <Image
               src={logo}
-              alt="Accusum Logo"
-              fill
-              className="object-contain"
-              priority
+              width={38}
+              height={38}
+              alt="DriveScore"
+              className="h-9.5 w-auto"
             />
+            <span className="text-xl sm:text-2xl font-bold tracking-tight text-[#D13900] poppins">
+              DriveScore
+            </span>
           </div>
 
           {/* Heading */}
-          <h1 className="text-2xl sm:text-[28px] font-bold text-gray-900 tracking-tight text-center mb-1.5 font-poppins">
-            Welcome to ACCUSUM
+          <h1 className="text-2xl sm:text-[32px] font-bold text-gray-900 tracking-tight text-center mb-3 poppins">
+            Welcome to DRIVESCORE
           </h1>
           
           {/* Subheading */}
-          <p className="text-sm sm:text-base text-gray-400 font-medium text-center mb-8 font-poppins">
-            AI-powered bookkeeping made simple
+          <p className="text-xs sm:text-sm text-gray-500 font-medium text-center mb-8 max-w-sm leading-relaxed poppins">
+            Turn Excel data into scores, rankings, and weekly competition.
           </p>
 
-          <form onSubmit={handleSubmit} className="w-full space-y-5">
+          <form onSubmit={handleSubmit} className="w-full space-y-4">
+            
             {/* Email Field */}
             <div className="w-full">
-              <label
-                htmlFor="email"
-                className="block text-sm font-bold text-gray-800 mb-2"
-              >
+              <label htmlFor="email" className="block text-xs sm:text-sm font-bold text-gray-800 mb-1.5">
                 Email
               </label>
               <div className="relative flex items-center">
-                <Mail className="absolute left-4 w-5 h-5 text-gray-400 pointer-events-none" />
+                <Mail className="absolute left-4 w-4.5 h-4.5 text-gray-400 pointer-events-none" />
                 <input
                   type="email"
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 bg-[#F8F8F6] border border-gray-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400/50 focus:border-transparent text-sm sm:text-base text-gray-800 placeholder-gray-400 font-medium transition-all"
-                  placeholder="Enter your email address"
+                  className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-800 placeholder-gray-400 font-medium transition-all"
+                  placeholder="Enter your email"
                   required
                 />
               </div>
+            </div>
+
+            {/* Password Field */}
+            <div className="w-full">
+              <label htmlFor="password" className="block text-xs sm:text-sm font-bold text-gray-800 mb-1.5">
+                Password
+              </label>
+              <div className="relative flex items-center">
+                <Lock className="absolute left-4 w-4.5 h-4.5 text-gray-400 pointer-events-none" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-12 pr-12 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-800 placeholder-gray-400 font-medium transition-all"
+                  placeholder="Enter Password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 text-gray-400 hover:text-gray-600 focus:outline-none cursor-pointer"
+                >
+                  {showPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Remember Me & Forgot Password Row */}
+            <div className="flex justify-between items-center w-full pt-1.5 select-none">
+              <label className="flex items-center gap-2 text-xs font-semibold text-gray-500 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="rounded border-gray-300 text-[#D13900] focus:ring-[#D13900] w-3.5 h-3.5"
+                />
+                <span>Remember Me</span>
+              </label>
+              <Link
+                href="/forgot-password"
+                className="text-xs sm:text-sm font-bold text-[#D13900] hover:underline cursor-pointer"
+              >
+                Forgot Password?
+              </Link>
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
-              style={{ background: "var(--Gradian-Colur, linear-gradient(180deg, #258200 0%, #58B500 100%))" }}
-              className="w-full py-4 rounded-full hover:brightness-110 text-white font-bold transition-all duration-200 shadow-md hover:shadow-lg text-center mt-2 disabled:opacity-75 disabled:pointer-events-none"
+              className="w-full py-3.5 rounded-full bg-[#D13900] hover:bg-[#b23000] text-white font-bold transition-all duration-200 shadow-sm hover:shadow flex items-center justify-center gap-2 mt-6 disabled:opacity-75 disabled:pointer-events-none cursor-pointer select-none"
             >
-              {isLoading ? "Signing In..." : "Sign In"}
+              <span>{isLoading ? "Logging In..." : "Log In"}</span>
+              {!isLoading && <ArrowRight className="w-4.5 h-4.5 stroke-[2.5]" />}
             </button>
 
           </form>
 
-          {/* Footer Link */}
-          <div className="mt-8 text-center text-sm font-medium text-gray-500 font-poppins">
+          {/* Redirect to Sign Up */}
+          <div className="mt-8 text-center text-sm font-medium text-gray-500 poppins">
             Don&apos;t have an account?{" "}
             <Link
               href="/register"
-              className="text-[#3da800] font-bold hover:underline ml-1"
+              className="text-[#D13900] font-bold hover:underline ml-1 cursor-pointer"
             >
               Sign Up
             </Link>

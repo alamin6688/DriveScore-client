@@ -48,7 +48,7 @@ const ImportDataSection = () => {
         </div>
 
         {/* Dropzone Container */}
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div
             {...getRootProps()}
             className={`relative w-full rounded-[32px] p-12 sm:p-16 text-center bg-white shadow-[0_8px_30px_rgba(0,0,0,0.015)] transition-all duration-300 flex flex-col items-center justify-center cursor-pointer select-none

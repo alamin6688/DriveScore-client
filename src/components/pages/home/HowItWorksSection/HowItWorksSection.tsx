@@ -11,7 +11,7 @@ const steps = [
   },
   {
     number: "02",
-    title: "AI Scores Calculated",
+    title: "Scores Calculated",
     description:
       "Our proprietary algorithm processes every data point instantly, weighting consistency, improvement rate, peak performance, and head-to-head comparisons.",
     icon: Zap,
@@ -76,17 +76,6 @@ const HowItWorksSection = () => {
                   <p className="text-[13px] sm:text-sm text-gray-400 font-normal leading-relaxed mb-8">
                     {step.description}
                   </p>
-                </div>
-
-                {/* Action Link */}
-                <div>
-                  <a
-                    href="#"
-                    className="inline-flex items-center gap-1 text-[13px] font-bold text-red-500 hover:text-red-600 transition-colors group/link"
-                  >
-                    <span>Learn more</span>
-                    <ChevronRight className="w-4 h-4 transition-transform duration-200 group-hover/link:translate-x-1" />
-                  </a>
                 </div>
               </div>
             );
