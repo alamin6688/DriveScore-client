@@ -31,7 +31,7 @@ const HowItWorksSection = () => {
       <div className="max-w-7xl mx-auto px-4"> 
         {/* Badge */}
         <div className="flex justify-center mb-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-200/80 bg-white text-xs sm:text-sm font-semibold text-gray-800 shadow-sm backdrop-blur-sm select-none">
+          <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-2xl border-b-2 border-b-red-500/60  bg-white text-xs sm:text-sm font-semibold text-gray-800 shadow-sm select-none">
             <Sparkle className="w-3.5 h-3.5 text-gray-800 fill-gray-800/20" />
             <span>How It Works</span>
           </div>

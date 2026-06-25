@@ -321,11 +321,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
                       src={logoIcon}
                       width={32}
                       height={32}
-                      alt="DriveScore"
+                      alt="ScorecardLeague"
                       className="h-8.5 w-auto"
                     />
                     <span className="text-xl font-bold tracking-tight text-[#D13900] poppins">
-                      DriveScore
+                      Scorecard League
                     </span>
                   </div>
                 ) : (

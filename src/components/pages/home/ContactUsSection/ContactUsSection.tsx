@@ -59,7 +59,7 @@ export default function ContactUsSection() {
       <div className="max-w-7xl mx-auto px-4">
         {/* Badge */}
         <div className="flex justify-center mb-6">
-          <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-2xl border-b-2 border-b-black  bg-white text-xs sm:text-sm font-semibold text-gray-800 shadow-sm select-none">
+          <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-2xl border-b-2 border-b-red-500/60  bg-white text-xs sm:text-sm font-semibold text-gray-800 shadow-sm select-none">
             <span>Get In Touch</span>
           </div>
         </div>
@@ -78,11 +78,11 @@ export default function ContactUsSection() {
         {/* Contact Information Buttons Row */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12">
           <a
-            href="mailto:hello@drivescore.io"
+            href="mailto:hello@scorecardleague.com"
             className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-xl border border-black bg-white text-xs sm:text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors shadow-sm select-none"
           >
             <Mail className="w-4 h-4 text-gray-400" />
-            <span>Email : hello@drivescore.io</span>
+            <span>Email : [EMAIL_ADDRESS]</span>
           </a>
           <a
             href="tel:27874387637"

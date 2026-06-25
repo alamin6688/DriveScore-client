@@ -69,7 +69,7 @@ const authSlice = createSlice({
           document.cookie = `${cookieName}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Lax;`;
         });
         // 4. Hard redirect to clear all cache and reset the app state
-        window.location.href = "/login";
+        window.location.href = "/";
       }
     },
   },

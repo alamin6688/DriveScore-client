@@ -35,13 +35,13 @@ export default function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-4 flex flex-col justify-between">
             <div>
-              {/* DriveScore Brand Logo */}
+              {/* Scorecard League Brand Logo */}
               <Link href="/" className="flex items-center gap-2 mb-6 hover:opacity-90 transition-opacity">
                 <div className="w-10 h-10 rounded-xl bg-[#D13900] flex items-center justify-center text-white">
                   <Gauge className="w-5 h-5 stroke-2" />
                 </div>
                 <span className="text-xl font-bold tracking-tight text-[#D13900] poppins">
-                  DriveScore
+                  Scorecard League
                 </span>
               </Link>
               <p className="text-sm text-[#A0A3A6] leading-relaxed font-normal max-w-sm">

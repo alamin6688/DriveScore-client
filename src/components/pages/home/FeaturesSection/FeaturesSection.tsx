@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import tabImage1 from "@/assets/tabImages/tabImage1.png";
+import platformFeatureIcon from "@/assets/svg/platformFeatureIcon.svg";
 import tabImage2 from "@/assets/tabImages/tabImage2.png";
 import tabImage3 from "@/assets/tabImages/tabImage3.png";
 import tabImage4 from "@/assets/tabImages/tabImage4.png";
@@ -94,8 +95,14 @@ const FeaturesSection = () => {
         
         {/* Badge: Platform Features */}
         <div className="flex justify-center mb-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-200 bg-white text-xs sm:text-sm font-semibold text-gray-800 shadow-sm backdrop-blur-sm select-none">
-            <div className="w-2 h-2 rounded-full bg-[#D13900] animate-pulse" />
+          <div className="flex items-center justify-center gap-2.5 px-5 py-1.5 rounded-2xl border-b-2 border-b-red-500/60  bg-white text-xs sm:text-sm font-semibold text-gray-800 shadow-sm select-none">
+            <Image
+              src={platformFeatureIcon}
+              width={16}
+              height={16}
+              alt="Platform Features Icon"
+              className="w-4 h-4 select-none pointer-events-none shrink-0 mb-1"
+            />
             <span>Platform Features</span>
           </div>
         </div>

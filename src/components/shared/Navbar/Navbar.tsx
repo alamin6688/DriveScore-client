@@ -315,7 +315,7 @@ export default function Navbar() {
               src={logo}
               width={34}
               height={34}
-              alt="DriveScore"
+              alt="Scorecard League"
               className="h-8.5 w-auto"
             />
             <span className="font-extrabold text-[22px] text-[#D13900] tracking-tight poppins">

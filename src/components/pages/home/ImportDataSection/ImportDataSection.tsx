@@ -43,7 +43,7 @@ const ImportDataSection = () => {
             Rankings go live instantly. */}
           </h2>
           <p className="text-[13px] sm:text-sm md:text-[15px] text-gray-500/90 leading-relaxed font-medium max-w-2xl mx-auto px-2">
-            Upload an Excel spreadsheet with your driver sessions. DriveScore handles score calculation, normalization,
+            Upload an Excel spreadsheet with your driver sessions. Scorecard League handles score calculation, normalization,
             and leaderboard generation — automatically.
           </p>
         </div>

@@ -54,7 +54,7 @@ const HeroSection = () => {
 
           <Image
             src={dashboardMockup}
-            alt="DriveScore Dashboard Mockup"
+            alt="Scorecard League Dashboard Mockup"
             className="w-full h-auto object-contain"
             priority
           />
