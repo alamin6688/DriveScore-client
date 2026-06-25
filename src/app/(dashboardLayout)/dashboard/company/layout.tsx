@@ -1,11 +1,11 @@
-import UserLayout from "@/components/layout/driver-dashboard-layout/DriverLayout";
+import CompanyLayout from "@/components/layout/company-dashboard-layout/CompanyLayout";
 import React from "react";
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
 const layout = ({ children }: AdminLayoutProps) => {
-  return <UserLayout>{children}</UserLayout>;
+  return <CompanyLayout>{children}</CompanyLayout>;
 };
 
 export default layout;
