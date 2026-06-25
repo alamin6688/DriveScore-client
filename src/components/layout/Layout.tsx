@@ -762,11 +762,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
               <button
                 onClick={confirmLogout}
                 disabled={isLoggingOut}
-                style={{
-                  background:
-                    "var(--Gradian-Colur, linear-gradient(180deg, #258200 0%, #58B500 100%))",
-                }}
-                className="flex-1 py-3 px-6 hover:brightness-110 text-white font-extrabold rounded-full text-sm transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
+                className="flex-1 py-3 px-6 bg-[#FF3B30] hover:bg-[#E02B20] text-white font-extrabold rounded-full text-sm transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {isLoggingOut ? "Logging Out..." : "Log Out"}
               </button>

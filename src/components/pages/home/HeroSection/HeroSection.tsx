@@ -17,10 +17,10 @@ const HeroSection = () => {
         {/* Headline */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[70px] font-extrabold text-gray-900 leading-[1.15] tracking-normal mb-6 max-w-5xl select-text px-1 sm:px-0 poppins">
           Turn Your{" "}
-          <span className="italic font-light text-gray-500">Driver Data</span>{" "}
-          Into a Winning <span> </span>
+          <span className="italic font-light text-gray-500">Scorecard</span>{" "}
+          Into a Fun <span> </span>
           {/* <br className="hidden md:inline" /> */}
-          Competition
+          Game
         </h1>
 
         {/* Sub-headline */}

@@ -4,23 +4,23 @@ import { Sparkle, FileText, Zap, Trophy, ChevronRight } from "lucide-react";
 const steps = [
   {
     number: "01",
-    title: "Upload Driver Data",
+    title: "Upload Team Data",
     description:
-      "Import your driver session data via Excel or CSV. Our system reads lap times, sector splits, consistency scores, and any custom metrics automatically.",
+      "Import your team data you download from Cortex via Excel or CSV. Our system reads each score automatically and presents it in a fun gamified platform.",
     icon: FileText,
   },
   {
     number: "02",
-    title: "Scores Calculated",
+    title: "Customized Metrics",
     description:
-      "Our proprietary algorithm processes every data point instantly, weighting consistency, improvement rate, peak performance, and head-to-head comparisons.",
+      "Our proprietary algorithm processes every metric instantly. You have the ability to customize the weight of each metric to your team's standards.",
     icon: Zap,
   },
   {
     number: "03",
-    title: "Compete on Leaderboard",
+    title: "Fun Weekly Leaderboard",
     description:
-      "Import your driver session data via Excel or CSV. Our system reads lap times, sector splits, consistency scores, and any custom metrics automatically.",
+      "Team members will engage in this gamified platform to see their ranks in each metric compared to their team through their phones on the web app. ",
     icon: Trophy,
   },
 ];

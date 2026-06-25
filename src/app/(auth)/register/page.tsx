@@ -12,7 +12,8 @@ import {
   Lock, 
   Eye, 
   EyeOff, 
-  ArrowRight 
+  ArrowRight,
+  MessageSquare 
 } from "lucide-react";
 import { useRegisterUserMutation } from "@/service/auth/authApi";
 import { getApiErrorMessage } from "@/utils/getApiErrorMessage";
@@ -22,11 +23,9 @@ const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [companyName, setCompanyName] = useState("");
+  const [companyCode, setCompanyCode] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  
-  // Selection role toggle state (visual)
-  const [role, setRole] = useState<"company" | "driver">("company");
   
   // Password visible toggle states
   const [showPassword, setShowPassword] = useState(false);
@@ -52,8 +51,8 @@ const RegisterPage = () => {
     }
 
     try {
-      // API expects name, email, and companyName
-      const payload = { name, email, companyName };
+      // API expects name, email, and companyName, but we include password and companyCode for full compatibility
+      const payload = { name, email, companyName, companyCode, password };
       const res = await register(payload).unwrap();
       
       if (res?.success === true) {
@@ -75,14 +74,14 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-[#f8f9fa] flex items-center justify-center overflow-hidden py-16 select-text">
+    <div className="relative w-full min-h-screen bg-[#F3F4F6] flex items-center justify-center overflow-hidden py-16 select-text font-poppins">
       
       {/* Main Content Card Container */}
       <div className="relative z-20 w-full max-w-[540px] px-4">
-        <div className="bg-white rounded-[32px] p-8 sm:p-12 md:p-14 shadow-[0_8px_40px_rgba(0,0,0,0.02)] border border-gray-100 flex flex-col items-center">
+        <div className="bg-white rounded-[32px] p-8 sm:p-12 md:p-14 shadow-sm border border-gray-100 flex flex-col items-center">
           
           {/* Logo Brand Container */}
-          <div className="flex items-center gap-2 mb-8 select-none">
+          <div className="flex items-center gap-2 mb-6 select-none">
             <Image
               src={logo}
               width={38}
@@ -96,38 +95,12 @@ const RegisterPage = () => {
           </div>
 
           {/* Heading */}
-          <h1 className="text-2xl sm:text-[32px] font-bold text-gray-900 tracking-tight text-center mb-3 poppins">
+          <h1 className="text-2xl sm:text-[32px] font-bold text-gray-955 tracking-tight text-center mb-2 poppins">
             Create an account
           </h1>
-
-          {/* Role Toggle Selector Grid */}
-          <div className="grid grid-cols-2 gap-4 w-full mb-4">
-            <button
-              type="button"
-              onClick={() => setRole("company")}
-              className={`text-xs sm:text-sm font-bold py-3 rounded-xl border transition-all duration-200 select-none cursor-pointer ${
-                role === "company"
-                  ? "bg-[#D13900] text-white border-transparent shadow-sm"
-                  : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
-              }`}
-            >
-              As a Company
-            </button>
-            <button
-              type="button"
-              onClick={() => setRole("driver")}
-              className={`text-xs sm:text-sm font-bold py-3 rounded-xl border transition-all duration-200 select-none cursor-pointer ${
-                role === "driver"
-                  ? "bg-[#D13900] text-white border-transparent shadow-sm"
-                  : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
-              }`}
-            >
-              As a Driver
-            </button>
-          </div>
           
           {/* Subheading */}
-          <p className="text-xs sm:text-sm text-gray-500 font-medium text-center mb-8 max-w-sm leading-relaxed poppins">
+          <p className="text-xs sm:text-sm text-gray-400 font-semibold text-center mb-8 max-w-sm leading-relaxed poppins">
             Turn Excel data into scores, rankings, and weekly competition.
           </p>
 
@@ -135,7 +108,7 @@ const RegisterPage = () => {
             
             {/* Name Field */}
             <div className="w-full">
-              <label htmlFor="name" className="block text-xs sm:text-sm font-bold text-gray-800 mb-1.5">
+              <label htmlFor="name" className="block text-xs font-bold text-gray-800 mb-1.5">
                 Name
               </label>
               <div className="relative flex items-center">
@@ -145,7 +118,7 @@ const RegisterPage = () => {
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-800 placeholder-gray-400 font-medium transition-all"
+                  className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-850 placeholder-gray-400 font-medium transition-all"
                   placeholder="Enter your Name"
                   required
                 />
@@ -154,7 +127,7 @@ const RegisterPage = () => {
 
             {/* Email Field */}
             <div className="w-full">
-              <label htmlFor="email" className="block text-xs sm:text-sm font-bold text-gray-800 mb-1.5">
+              <label htmlFor="email" className="block text-xs font-bold text-gray-800 mb-1.5">
                 Email
               </label>
               <div className="relative flex items-center">
@@ -164,7 +137,7 @@ const RegisterPage = () => {
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-800 placeholder-gray-400 font-medium transition-all"
+                  className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-855 placeholder-gray-400 font-medium transition-all"
                   placeholder="Enter your email"
                   required
                 />
@@ -173,7 +146,7 @@ const RegisterPage = () => {
 
             {/* Company Name Field */}
             <div className="w-full">
-              <label htmlFor="companyName" className="block text-xs sm:text-sm font-bold text-gray-800 mb-1.5">
+              <label htmlFor="companyName" className="block text-xs font-bold text-gray-800 mb-1.5">
                 Company Name
               </label>
               <div className="relative flex items-center">
@@ -183,8 +156,27 @@ const RegisterPage = () => {
                   id="companyName"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-800 placeholder-gray-400 font-medium transition-all"
+                  className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-850 placeholder-gray-400 font-medium transition-all"
                   placeholder="Company Name"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Company Code Field */}
+            <div className="w-full">
+              <label htmlFor="companyCode" className="block text-xs font-bold text-gray-800 mb-1.5">
+                Company Code
+              </label>
+              <div className="relative flex items-center">
+                <MessageSquare className="absolute left-4 w-4.5 h-4.5 text-gray-400 pointer-events-none" />
+                <input
+                  type="text"
+                  id="companyCode"
+                  value={companyCode}
+                  onChange={(e) => setCompanyCode(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-850 placeholder-gray-400 font-medium transition-all"
+                  placeholder="Company Code"
                   required
                 />
               </div>
@@ -192,7 +184,7 @@ const RegisterPage = () => {
 
             {/* Password Field */}
             <div className="w-full">
-              <label htmlFor="password" className="block text-xs sm:text-sm font-bold text-gray-800 mb-1.5">
+              <label htmlFor="password" className="block text-xs font-bold text-gray-800 mb-1.5">
                 Password
               </label>
               <div className="relative flex items-center">
@@ -202,14 +194,14 @@ const RegisterPage = () => {
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-12 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-800 placeholder-gray-400 font-medium transition-all"
+                  className="w-full pl-12 pr-12 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-850 placeholder-gray-400 font-medium transition-all"
                   placeholder="Enter your password"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 text-gray-400 hover:text-gray-600 focus:outline-none cursor-pointer"
+                  className="absolute right-4 text-gray-400 hover:text-gray-650 focus:outline-none cursor-pointer flex items-center justify-center"
                 >
                   {showPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
                 </button>
@@ -218,7 +210,7 @@ const RegisterPage = () => {
 
             {/* Confirm Password Field */}
             <div className="w-full">
-              <label htmlFor="confirmPassword" className="block text-xs sm:text-sm font-bold text-gray-800 mb-1.5">
+              <label htmlFor="confirmPassword" className="block text-xs font-bold text-gray-800 mb-1.5">
                 Confirm Password
               </label>
               <div className="relative flex items-center">
@@ -228,14 +220,14 @@ const RegisterPage = () => {
                   id="confirmPassword"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full pl-12 pr-12 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-800 placeholder-gray-400 font-medium transition-all"
+                  className="w-full pl-12 pr-12 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-850 placeholder-gray-400 font-medium transition-all"
                   placeholder="Enter your confirm password"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-4 text-gray-400 hover:text-gray-600 focus:outline-none cursor-pointer"
+                  className="absolute right-4 text-gray-400 hover:text-gray-655 focus:outline-none cursor-pointer flex items-center justify-center"
                 >
                   {showConfirmPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
                 </button>
@@ -246,7 +238,7 @@ const RegisterPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 rounded-full bg-[#D13900] hover:bg-[#b23000] text-white font-bold transition-all duration-200 shadow-sm hover:shadow flex items-center justify-center gap-2 mt-6 disabled:opacity-75 disabled:pointer-events-none cursor-pointer select-none"
+              className="w-full py-3.5 rounded-full bg-[#D10000] hover:bg-[#B00000] text-white font-bold transition-all duration-200 shadow-sm hover:shadow flex items-center justify-center gap-2 mt-6 disabled:opacity-75 disabled:pointer-events-none cursor-pointer select-none text-sm"
             >
               <span>{isLoading ? "Signing Up..." : "Sign Up"}</span>
               {!isLoading && <ArrowRight className="w-4.5 h-4.5 stroke-[2.5]" />}
@@ -255,13 +247,13 @@ const RegisterPage = () => {
           </form>
 
           {/* Redirect to Sign In */}
-          <div className="mt-8 text-center text-sm font-medium text-gray-550 poppins">
+          <div className="mt-8 text-center text-sm font-medium text-gray-500 poppins">
             Already have an account?{" "}
             <Link
               href="/login"
-              className="text-[#D13900] font-bold hover:underline ml-1 cursor-pointer"
+              className="text-[#D10000] font-bold hover:underline ml-1 cursor-pointer"
             >
-              Log In
+              Sign In
             </Link>
           </div>
 

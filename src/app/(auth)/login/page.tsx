@@ -5,14 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { 
-  Mail, 
-  Lock, 
-  Eye, 
-  EyeOff, 
-  ArrowRight 
-} from "lucide-react";
-import { useLoginUserMutation, useResendOtpMutation } from "@/service/auth/authApi";
+import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+import {
+  useLoginUserMutation,
+  useResendOtpMutation,
+} from "@/service/auth/authApi";
 import { getApiErrorMessage } from "@/utils/getApiErrorMessage";
 import logo from "@/assets/logo/logo.svg";
 
@@ -61,19 +58,17 @@ const LoginPage = () => {
       toast.error(
         getApiErrorMessage(
           err,
-          "An unexpected error occurred. Please try again."
-        )
+          "An unexpected error occurred. Please try again.",
+        ),
       );
     }
   };
 
   return (
     <div className="relative w-full min-h-screen bg-[#f8f9fa] flex items-center justify-center overflow-hidden py-16 select-text">
-      
       {/* Main Content Card Container */}
       <div className="relative z-20 w-full max-w-[540px] px-4">
         <div className="bg-white rounded-[32px] p-8 sm:p-12 md:p-14 shadow-[0_8px_40px_rgba(0,0,0,0.02)] border border-gray-100 flex flex-col items-center">
-          
           {/* Logo Brand Container */}
           <div className="flex items-center gap-2 mb-8 select-none">
             <Image
@@ -92,17 +87,19 @@ const LoginPage = () => {
           <h1 className="text-2xl sm:text-[32px] font-bold text-gray-900 tracking-tight text-center mb-3 poppins">
             Welcome to DRIVESCORE
           </h1>
-          
+
           {/* Subheading */}
           <p className="text-xs sm:text-sm text-gray-500 font-medium text-center mb-8 max-w-sm leading-relaxed poppins">
             Turn Excel data into scores, rankings, and weekly competition.
           </p>
 
           <form onSubmit={handleSubmit} className="w-full space-y-4">
-            
             {/* Email Field */}
             <div className="w-full">
-              <label htmlFor="email" className="block text-xs sm:text-sm font-bold text-gray-800 mb-1.5">
+              <label
+                htmlFor="email"
+                className="block text-xs sm:text-sm font-bold text-gray-800 mb-1.5"
+              >
                 Email
               </label>
               <div className="relative flex items-center">
@@ -121,7 +118,10 @@ const LoginPage = () => {
 
             {/* Password Field */}
             <div className="w-full">
-              <label htmlFor="password" className="block text-xs sm:text-sm font-bold text-gray-800 mb-1.5">
+              <label
+                htmlFor="password"
+                className="block text-xs sm:text-sm font-bold text-gray-800 mb-1.5"
+              >
                 Password
               </label>
               <div className="relative flex items-center">
@@ -140,7 +140,11 @@ const LoginPage = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 text-gray-400 hover:text-gray-600 focus:outline-none cursor-pointer"
                 >
-                  {showPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
+                  {showPassword ? (
+                    <EyeOff className="w-4.5 h-4.5" />
+                  ) : (
+                    <Eye className="w-4.5 h-4.5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -171,9 +175,10 @@ const LoginPage = () => {
               className="w-full py-3.5 rounded-full bg-[#D13900] hover:bg-[#b23000] text-white font-bold transition-all duration-200 shadow-sm hover:shadow flex items-center justify-center gap-2 mt-6 disabled:opacity-75 disabled:pointer-events-none cursor-pointer select-none"
             >
               <span>{isLoading ? "Logging In..." : "Log In"}</span>
-              {!isLoading && <ArrowRight className="w-4.5 h-4.5 stroke-[2.5]" />}
+              {!isLoading && (
+                <ArrowRight className="w-4.5 h-4.5 stroke-[2.5]" />
+              )}
             </button>
-
           </form>
 
           {/* Redirect to Sign Up */}
@@ -186,10 +191,8 @@ const LoginPage = () => {
               Sign Up
             </Link>
           </div>
-
         </div>
       </div>
-
     </div>
   );
 };

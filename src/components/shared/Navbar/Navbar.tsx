@@ -176,7 +176,7 @@ export default function Navbar() {
               alt="logo"
               className="h-8 w-auto"
             />
-            <span className="font-extrabold text-lg text-[#D13900] tracking-tight">DriveScore</span>
+            <span className="font-extrabold text-lg text-[#D13900] tracking-tight">Scorecard League</span>
           </Link>
         }
         placement="left"
@@ -319,7 +319,7 @@ export default function Navbar() {
               className="h-8.5 w-auto"
             />
             <span className="font-extrabold text-[22px] text-[#D13900] tracking-tight poppins">
-              DriveScore
+              Scorecard League
             </span>
           </Link>
 
@@ -385,7 +385,7 @@ export default function Navbar() {
               alt="logo"
               className="h-7 w-auto"
             />
-            <span className="font-extrabold text-lg text-[#D13900] tracking-tight">DriveScore</span>
+            <span className="font-extrabold text-lg text-[#D13900] tracking-tight">Scorecard League</span>
           </Link>
           <button
             onClick={() => setOpen(true)}

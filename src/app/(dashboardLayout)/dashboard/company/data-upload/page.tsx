@@ -3,8 +3,21 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FileSpreadsheet, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useUploadDocumentMutation } from "@/service/documents/documentsApi";
+import { useUploadDocumentMutation, useGetDocumentsQuery, unwrapDocumentList } from "@/service/documents/documentsApi";
 import { createPortal } from "react-dom";
+import { Button } from "@heroui/react";
+
+const MOCK_QUEUE_ITEMS = [
+  { id: "mock-1", filename: "Alpha Fleet_com.csv", size: "999 KB", uploadDate: "27 May,2027, 10:00 PM", format: "Excel", status: "Success" },
+  { id: "mock-2", filename: "Alpha Fleet_com.csv", size: "999 KB", uploadDate: "27 May,2027, 10:00 PM", format: "Excel", status: "Success" },
+  { id: "mock-3", filename: "Alpha Fleet_com.csv", size: "999 KB", uploadDate: "27 May,2027, 10:00 PM", format: "Excel", status: "Failed" },
+  { id: "mock-4", filename: "Alpha Fleet_com.csv", size: "999 KB", uploadDate: "27 May,2027, 10:00 PM", format: "Excel", status: "Success" },
+  { id: "mock-5", filename: "Alpha Fleet_com.csv", size: "999 KB", uploadDate: "27 May,2027, 10:00 PM", format: "Excel", status: "Success" },
+  { id: "mock-6", filename: "Alpha Fleet_com.csv", size: "999 KB", uploadDate: "27 May,2027, 10:00 PM", format: "Excel", status: "Failed" },
+  { id: "mock-7", filename: "Alpha Fleet_com.csv", size: "999 KB", uploadDate: "27 May,2027, 10:00 PM", format: "Excel", status: "Success" },
+  { id: "mock-8", filename: "Alpha Fleet_com.csv", size: "999 KB", uploadDate: "27 May,2027, 10:00 PM", format: "Excel", status: "Success" },
+  { id: "mock-9", filename: "Alpha Fleet_com.csv", size: "999 KB", uploadDate: "27 May,2027, 10:00 PM", format: "Excel", status: "Success" },
+];
 
 export default function DataUploadPage() {
   const [mounted, setMounted] = useState(false);
@@ -16,6 +29,7 @@ export default function DataUploadPage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadDocument] = useUploadDocumentMutation();
+  const { data: documentsResponse, refetch: refetchDocuments } = useGetDocumentsQuery();
 
   useEffect(() => {
     setMounted(true);
@@ -66,6 +80,9 @@ export default function DataUploadPage() {
     try {
       // Trigger actual upload mutation
       await uploadDocument(formData).unwrap();
+
+      // Refetch documents list
+      refetchDocuments();
 
       // Complete progress and open success modal
       clearInterval(progressInterval);
@@ -120,8 +137,53 @@ export default function DataUploadPage() {
     }
   };
 
+  const getQueueData = () => {
+    const apiDocs = unwrapDocumentList(documentsResponse);
+    if (apiDocs && apiDocs.length > 0) {
+      return apiDocs.map((doc) => {
+        const sizeKb = doc.size ? Math.round(doc.size / 1024) : 0;
+        const date = doc.createdAt
+          ? new Date(doc.createdAt).toLocaleString("en-US", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            })
+          : "Unknown Date";
+
+        let statusText = "Success";
+        if (doc.status === "FAILED") statusText = "Failed";
+        else if (
+          doc.status === "PROCESSING" ||
+          doc.status === "UPLOADED"
+        )
+          statusText = "Processing";
+
+        const extension = doc.originalName
+          ? doc.originalName
+              .substring(doc.originalName.lastIndexOf("."))
+              .toUpperCase()
+              .replace(".", "")
+          : "EXCEL";
+
+        return {
+          id: doc.id,
+          filename: doc.originalName || doc.filename || "Uploaded File",
+          size: `${sizeKb} KB`,
+          uploadDate: date,
+          format: extension === "CSV" ? "CSV" : "Excel",
+          status: statusText,
+        };
+      });
+    }
+
+    return MOCK_QUEUE_ITEMS;
+  };
+
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-6 font-poppins pb-12 select-text animate-fade-in text-left">
+    <div className="w-full space-y-6 font-poppins pb-12 select-text animate-fade-in text-left">
       <input
         type="file"
         ref={fileInputRef}
@@ -203,6 +265,60 @@ export default function DataUploadPage() {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Uploaded Documents Queue Card */}
+      <div className="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm space-y-4">
+        <div className="text-left">
+          <h3 className="text-base font-bold text-gray-900 leading-tight">
+            Uploaded Docoments Queue
+          </h3>
+          <p className="text-[10px] text-gray-400 font-semibold mt-0.5">
+            List of uploaded excel files
+          </p>
+        </div>
+
+        {/* Responsive Table Container */}
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-gray-100 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                <th className="py-3.5 px-2 font-bold text-gray-400">File Name</th>
+                <th className="py-3.5 px-2 font-bold text-gray-400">Size</th>
+                <th className="py-3.5 px-2 font-bold text-gray-400">Uploaded Date</th>
+                <th className="py-3.5 px-2 font-bold text-gray-400">Format</th>
+                <th className="py-3.5 px-2 font-bold text-gray-400">Status</th>
+                <th className="py-3.5 px-2 font-bold text-gray-400">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50/80 text-xs font-semibold text-gray-700">
+              {getQueueData().map((doc, idx) => (
+                <tr key={doc.id || idx} className="hover:bg-gray-50/40 transition-colors">
+                  <td className="py-4 px-2 font-bold text-gray-805">{doc.filename}</td>
+                  <td className="py-4 px-2 text-gray-400 font-bold">{doc.size}</td>
+                  <td className="py-4 px-2 text-gray-400 font-bold">{doc.uploadDate}</td>
+                  <td className="py-4 px-2 text-gray-400 font-bold">{doc.format}</td>
+                  <td className="py-4 px-2">
+                    <span
+                      className={`inline-flex px-3 py-1 rounded-full text-[10px] font-bold tracking-wide ${
+                        doc.status === "Success"
+                          ? "bg-[#E6F4EA] text-[#137333]"
+                          : doc.status === "Failed"
+                            ? "bg-[#FCE8E6] text-[#C5221F]"
+                            : "bg-blue-50 text-blue-700 animate-pulse"
+                      }`}
+                    >
+                      {doc.status}
+                    </span>
+                  </td>
+                  <td className="py-4 px-2">
+                    <Button className="bg-gray-500 hover:bg-gray-600 rounded-2xl text-white text-xs px-2 h-6"> View</Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Success Modal Overlay */}

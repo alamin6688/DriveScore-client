@@ -12,7 +12,21 @@ import {
   ChevronRight
 } from "lucide-react";
 import Image from "next/image";
-import dashboardOverview from "@/assets/images/dashboardOverview.png";
+import tabImage1 from "@/assets/tabImages/tabImage1.png";
+import tabImage2 from "@/assets/tabImages/tabImage2.png";
+import tabImage3 from "@/assets/tabImages/tabImage3.png";
+import tabImage4 from "@/assets/tabImages/tabImage4.png";
+import tabImage5 from "@/assets/tabImages/tabImage5.png";
+import tabImage6 from "@/assets/tabImages/tabImage6.png";
+
+const tabImages = [
+  tabImage1,
+  tabImage2,
+  tabImage3,
+  tabImage4,
+  tabImage5,
+  tabImage6,
+];
 
 // Predefined slides content
 const featuresData = [
@@ -87,9 +101,9 @@ const FeaturesSection = () => {
         </div>
 
         {/* Heading & Subtitle */}
-        <div className="text-center mb-16 max-w-3xl mx-auto">
+        <div className="text-center mb-16 max-w-4xl mx-auto">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight leading-tight mb-4 poppins">
-            Everything you need to lead the pack
+            Everything you need to make the scorecard fun
           </h2>
           <p className="text-sm sm:text-base text-gray-500 font-medium tracking-wide">
             Built for fleet managers who want results
@@ -164,11 +178,11 @@ const FeaturesSection = () => {
           </div>
 
           {/* Right Card: Static Dashboard Overview Image */}
-          <div className="rounded-[32px] border border-gray-100 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.015)] p-4 sm:p-6 flex flex-col justify-center items-center overflow-hidden min-h-[320px]">
+          <div className="rounded-[32px] border border-gray-100 bg-linear-to-t from-[#FFEBE6] via-white to-[#FFEBE6] shadow-[0_8px_30px_rgba(0,0,0,0.015)] p-4 sm:p-6 flex flex-col justify-center items-center overflow-hidden min-h-[320px]">
             <div className="relative w-full h-full flex justify-center items-center">
               <Image
-                src={dashboardOverview}
-                alt="Dashboard Overview Mockup"
+                src={tabImages[activeIndex] || tabImage1}
+                alt={`${activeFeature.title} Mockup`}
                 className="w-full h-auto object-contain rounded-[24px] max-h-[460px] shadow-[0_4px_20px_rgba(0,0,0,0.02)]"
                 priority
               />

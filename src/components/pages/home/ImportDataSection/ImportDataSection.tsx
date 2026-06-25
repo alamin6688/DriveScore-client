@@ -36,10 +36,11 @@ const ImportDataSection = () => {
         </div>
 
         {/* Heading & Subtitle */}
-        <div className="text-center mb-12 max-w-3xl mx-auto">
+        <div className="text-center mb-12 max-w-4xl mx-auto">
           <h2 className="text-3xl sm:text-4xl md:text-[44px] font-extrabold text-gray-900 leading-[1.2] tracking-wide mb-5 poppins">
-            Drop your driver data. <br className="hidden sm:inline" />
-            Rankings go live instantly.
+            Upload your Driver Data and watch rankings go live instantly! 
+            {/* <br className="hidden sm:inline" />
+            Rankings go live instantly. */}
           </h2>
           <p className="text-[13px] sm:text-sm md:text-[15px] text-gray-500/90 leading-relaxed font-medium max-w-2xl mx-auto px-2">
             Upload an Excel spreadsheet with your driver sessions. DriveScore handles score calculation, normalization,

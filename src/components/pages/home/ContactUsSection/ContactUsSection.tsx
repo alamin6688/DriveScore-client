@@ -17,7 +17,7 @@ export default function ContactUsSection() {
   const [createContact] = useCreateContactMutation();
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -59,18 +59,19 @@ export default function ContactUsSection() {
       <div className="max-w-7xl mx-auto px-4">
         {/* Badge */}
         <div className="flex justify-center mb-6">
-          <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-2xl border-b-2 border-b-black  bg-white text-xs sm:text-sm font-semibold text-gray-800 shadow-sm select-none">  
-            <span>Get In Touch</span> 
+          <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-2xl border-b-2 border-b-black  bg-white text-xs sm:text-sm font-semibold text-gray-800 shadow-sm select-none">
+            <span>Get In Touch</span>
           </div>
         </div>
 
         {/* Heading & Subtitle */}
         <div className="text-center mb-10 max-w-3xl mx-auto">
           <h2 className="text-3xl sm:text-4xl md:text-[44px] font-extrabold text-gray-900 leading-tight tracking-wide mb-5 poppins">
-            Let's talk rankings. 
+            Let's Talk Winning
           </h2>
           <p className="text-[13px] sm:text-sm md:text-[15px] text-gray-500/90 leading-relaxed font-medium max-w-2xl mx-auto px-2">
-            Have questions? Our team will help you set up your first competition and get drivers ranked within the hour.
+            Have questions? Our team will help you set up your first competition
+            and get drivers ranked within the hour.
           </p>
         </div>
 
@@ -99,9 +100,16 @@ export default function ContactUsSection() {
               <div className="w-16 h-16 rounded-full bg-green-50 border border-green-200 flex items-center justify-center mb-6 text-green-600 shadow-sm">
                 <CheckCircle2 className="w-10 h-10 stroke-[1.75]" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Message Sent!</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                Message Sent!
+              </h3>
               <p className="text-gray-500 max-w-md mb-8 text-sm sm:text-base leading-relaxed">
-                Thank you for getting in touch, <span className="font-semibold text-gray-800">{formData.name}</span>. We have received your message and will respond within 24 hours.
+                Thank you for getting in touch,{" "}
+                <span className="font-semibold text-gray-800">
+                  {formData.name}
+                </span>
+                . We have received your message and will respond within 24
+                hours.
               </p>
               <button
                 onClick={() => {
@@ -118,7 +126,10 @@ export default function ContactUsSection() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Name Input */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[13px] font-bold text-gray-505 select-none" htmlFor="name">
+                  <label
+                    className="text-[13px] font-bold text-gray-505 select-none"
+                    htmlFor="name"
+                  >
                     Your Name
                   </label>
                   <input
@@ -135,7 +146,10 @@ export default function ContactUsSection() {
 
                 {/* Email Input */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[13px] font-bold text-gray-550 select-none" htmlFor="email">
+                  <label
+                    className="text-[13px] font-bold text-gray-550 select-none"
+                    htmlFor="email"
+                  >
                     Email Address
                   </label>
                   <input
