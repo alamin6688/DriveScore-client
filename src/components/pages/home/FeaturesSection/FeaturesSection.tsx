@@ -112,9 +112,6 @@ const FeaturesSection = () => {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-gray-900 tracking-tight leading-tight mb-4 poppins">
             Everything you need to make the scorecard fun
           </h2>
-          <p className="text-sm sm:text-base text-gray-500 font-medium tracking-wide">
-            Built for fleet managers who want results
-          </p>
         </div>
 
         {/* Main Grid: Left Interactive Card & Right Image Mockup */}
