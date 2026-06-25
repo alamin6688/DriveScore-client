@@ -37,7 +37,7 @@ const ImportDataSection = () => {
 
         {/* Heading & Subtitle */}
         <div className="text-center mb-12 max-w-4xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl md:text-[44px] font-extrabold text-gray-900 leading-[1.2] tracking-wide mb-5 poppins">
+          <h2 className="text-3xl sm:text-4xl md:text-[44px] font-normal text-gray-900 leading-[1.2] tracking-wide mb-5 poppins">
             Upload your Driver Data and watch rankings go live instantly! 
             {/* <br className="hidden sm:inline" />
             Rankings go live instantly. */}
@@ -87,7 +87,7 @@ const ImportDataSection = () => {
               </div>
             ) : (
               <>
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+                <h3 className="text-xl sm:text-2xl font-normal text-gray-900 tracking-wide">
                   Drop your Excel Sheet here
                 </h3>
                 <p className="text-xs sm:text-sm text-gray-405 mt-1.5 font-medium">

@@ -66,7 +66,7 @@ export default function ContactUsSection() {
 
         {/* Heading & Subtitle */}
         <div className="text-center mb-10 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl md:text-[44px] font-extrabold text-gray-900 leading-tight tracking-wide mb-5 poppins">
+          <h2 className="text-3xl sm:text-4xl md:text-[44px] font-normal text-gray-900 leading-tight tracking-wide mb-5 poppins">
             Let's Talk Winning
           </h2>
           <p className="text-[13px] sm:text-sm md:text-[15px] text-gray-500/90 leading-relaxed font-medium max-w-2xl mx-auto px-2">

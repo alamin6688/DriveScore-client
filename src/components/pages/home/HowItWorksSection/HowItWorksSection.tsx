@@ -39,7 +39,7 @@ const HowItWorksSection = () => {
 
         {/* Heading & Subtitle */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight leading-tight mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-gray-900 tracking-tight leading-tight mb-4">
             Get started in 3 simple steps
           </h2>
           <p className="text-sm sm:text-base text-gray-500 font-medium tracking-wide">
