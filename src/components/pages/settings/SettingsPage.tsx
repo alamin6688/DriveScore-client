@@ -28,16 +28,16 @@ export default function SettingsPage({ role = "company" }: SettingsPageProps) {
       logoLabel: "Add Company Logo",
     },
     driver: {
-      color: "#258200",
+      color: "#D13900",
       activeTabClass:
-        "bg-green-50/50 text-[#258200] border-l-[5px] border-l-[#258200] rounded-r-xl",
+        "bg-red-50/50 text-[#D13900] border-l-[5px] border-l-[#D13900] rounded-r-xl",
       inactiveTabClass:
         "border-l-[5px] border-l-transparent text-gray-500 hover:bg-gray-50/50 hover:text-gray-750",
-      btnClass: "bg-[#258200] hover:bg-[#1f6600] text-white",
+      btnClass: "bg-[#D13900] hover:bg-[#b23000] text-white",
       btnOutlineClass:
-        "border border-[#258200] text-[#258200] hover:bg-green-50/10",
-      inputFocusClass: "focus:ring-green-450/30 focus:border-[#258200]",
-      badgeClass: "bg-green-50 text-[#258200] border border-green-100/35",
+        "border border-[#D13900] text-[#D13900] hover:bg-red-50/10",
+      inputFocusClass: "focus:ring-red-450/30 focus:border-[#D13900]",
+      badgeClass: "bg-red-50 text-[#D13900] border border-red-100/35",
       logoLabel: "Change Photo",
     },
     admin: {

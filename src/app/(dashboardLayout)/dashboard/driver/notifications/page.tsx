@@ -13,7 +13,7 @@ const INITIAL_NOTIFICATIONS = [
   { id: "7", title: "Week 24 Competition Started", description: "The new weekly challenge is now live. Good luck!", time: "10:20 am" },
 ];
 
-export default function CompanyNotificationsPage() {
+export default function DriverNotificationsPage() {
   const [mounted, setMounted] = useState(false);
   const [notifications] = useState(INITIAL_NOTIFICATIONS);
 

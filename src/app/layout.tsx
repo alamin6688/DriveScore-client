@@ -2,27 +2,19 @@ import ScrollToTopButton from "@/components/ui/ScrollToTopButton/ScrollToTopButt
 import { HeroUiProvider } from "@/lib/providers/HeroUIProvider";
 import ReduxProvider from "@/redux/ReduxProvider";
 import type { Metadata } from "next";
-import { Inter, Sora } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 
 import { ConfigProvider } from "antd";
 import "antd/dist/reset.css";
 
-const inter = Inter({
-  weight: ["300", "400", "500", "600", "700"],
+const dmSans = DM_Sans({
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   style: ["normal", "italic"],
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-inter",
-});
-
-const sora = Sora({
-  weight: ["300", "400", "500", "600", "700", "800"],
-  style: ["normal"],
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-sora",
+  variable: "--font-dm-sans",
 });
 
 export const metadata: Metadata = {
@@ -43,14 +35,14 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning={true}
-        className={`${sora.variable} ${inter.variable} antialiased bg-white`}
+        className={`${dmSans.variable} antialiased bg-white`}
       >
         <HeroUiProvider>
           <ReduxProvider>
             <ConfigProvider
               theme={{
                 token: {
-                  fontFamily: "var(--font-sora), sans-serif",
+                  fontFamily: "var(--font-dm-sans), sans-serif",
                   colorPrimary: "#0BA8CC",
                   colorInfo: "#0BA8CC",
                   colorSuccess: "#3ECF8E",

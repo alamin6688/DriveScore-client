@@ -1,283 +1,408 @@
 "use client";
 
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import {
-  useGetUserDashboardQuery,
-} from "@/service/userDashboard/userDashboardApi";
+  Shield,
+  TrendingUp,
+  Trophy,
+  Flag,
+  ChevronDown,
+  ShieldAlert,
+  Gauge,
+  Calendar,
+  Wrench,
+  Award,
+} from "lucide-react";
 import {
-  getTransactionsPagination,
-  mapTransactionsToRecentRows,
-  useGetTransactionsQuery,
-} from "@/service/transactions/transactionsApi";
-import type {
-  ApiRecord,
-  DashboardChartPoint,
-  DashboardSummary,
-} from "@/service/userDashboard/userDashboardApi";
+  useGetProfileDataQuery,
+  getProfileName,
+} from "@/service/profile/profileApi";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
-const isRecord = (value: unknown): value is ApiRecord =>
-  typeof value === "object" && value !== null && !Array.isArray(value);
+const CHART_DATA = [
+  { name: "W1", score: 78.5 },
+  { name: "W2", score: 79 },
+  { name: "W3", score: 81 },
+  { name: "W4", score: 80 },
+  { name: "W5", score: 82 },
+  { name: "W6", score: 83.5 },
+  { name: "W7", score: 84.5 },
+  { name: "W8", score: 85 },
+];
 
-const toNumber = (value: unknown, fallback = 0) => {
-  if (typeof value === "number") return value;
-  if (typeof value === "string") {
-    const parsed = Number(value.replace(/[$,%\s,]/g, ""));
-    return Number.isFinite(parsed) ? parsed : fallback;
-  }
-  return fallback;
-};
+export default function DriverDashboardOverview() {
+  const [mounted, setMounted] = useState(false);
+  const [timeframe, setTimeframe] = useState("last 8 weeks");
+  const [timeframeDropdownOpen, setTimeframeDropdownOpen] = useState(false);
 
-const toString = (value: unknown, fallback = "") =>
-  typeof value === "string" || typeof value === "number" ? String(value) : fallback;
+  const { data: profileResponse } = useGetProfileDataQuery();
+  const user = profileResponse?.data || null;
+  const displayName = getProfileName(user) || "John";
 
-const pickRecord = (data: ApiRecord, keys: string[]) => {
-  for (const key of keys) {
-    const value = data[key];
-    if (isRecord(value)) return value;
-  }
-  return {};
-};
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-const pickArray = (data: ApiRecord, keys: string[]) => {
-  for (const key of keys) {
-    const value = data[key];
-    if (Array.isArray(value)) return value;
-  }
-  return [];
-};
+  // Leaderboard data centered around the user (Rank 2)
+  const leaders = [
+    { rank: 1, name: "Michael Brown", score: 94.8, change: "+8 From last week", isUser: false },
+    { rank: 2, name: displayName, score: 92.4, change: "+8 From last week", isUser: true },
+    { rank: 3, name: "Michael Brown", score: 90.1, change: "+8 From last week", isUser: false },
+    { rank: 4, name: "Michael Brown", score: 88.5, change: "+8 From last week", isUser: false },
+  ];
 
-const getMetricValue = (source: ApiRecord, keys: string[]) => {
-  for (const key of keys) {
-    const value = source[key];
-    if (isRecord(value) && "value" in value) return value.value;
-    if (value !== undefined) return value;
-  }
-
-  return undefined;
-};
-
-const getMetricChange = (source: ApiRecord, keys: string[]) => {
-  for (const key of keys) {
-    const value = source[key];
-    if (isRecord(value) && "change" in value) return value.change;
-  }
-
-  return undefined;
-};
-
-const mapStats = (data: unknown): Partial<DashboardSummary> => {
-  if (!isRecord(data)) return {};
-
-  const source = pickRecord(data, ["cards", "stats", "summary", "overview", "totals"]);
-
-  return {
-    revenue: toNumber(getMetricValue(source, ["totalRevenue", "revenue"])),
-    revenueChange: toNumber(
-      getMetricChange(source, ["totalRevenue", "revenue"]) ??
-        source.revenueChange ??
-        source.revenueGrowth ??
-        source.revenuePercentage
-    ),
-    expenses: toNumber(getMetricValue(source, ["totalExpenses", "expenses"])),
-    expensesChange: toNumber(
-      getMetricChange(source, ["totalExpenses", "expenses"]) ??
-        source.expensesChange ??
-        source.expensesGrowth ??
-        source.expensePercentage
-    ),
-    netIncome: toNumber(getMetricValue(source, ["netIncome", "income"])),
-    netIncomeChange: toNumber(
-      getMetricChange(source, ["netIncome", "income"]) ??
-        source.netIncomeChange ??
-        source.netIncomeGrowth ??
-        source.incomePercentage
-    ),
-    transactions: toNumber(getMetricValue(source, ["transactions", "totalTransactions"])),
-    transactionsChange: toNumber(
-      getMetricChange(source, ["transactions", "totalTransactions"]) ??
-        source.transactionsChange ??
-        source.transactionsGrowth ??
-        source.transactionPercentage
-    ),
-  };
-};
-
-const mapChart = (data: unknown): DashboardChartPoint[] => {
-  if (!isRecord(data)) return [];
-
-  return pickArray(data, ["chart", "chartData", "earnings", "earningsReport", "monthlyEarnings"]).map(
-    (item) => {
-      const record = isRecord(item) ? item : {};
-
-      return {
-        month: toString(record.month ?? record.label ?? record.name ?? record.date, "N/A"),
-        revenue: toNumber(record.revenue ?? record.totalRevenue),
-        expenses: toNumber(record.expenses ?? record.totalExpenses),
-      };
-    }
-  );
-};
-
-function StatsGridSkeleton() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      {[0, 1, 2, 3].map((item) => (
-        <div
-          key={item}
-          className="h-[120px] rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
-        >
-          <div className="h-full animate-pulse space-y-8">
-            <div className="h-3 w-24 rounded-full bg-gray-100" />
-            <div className="flex items-end justify-between">
-              <div className="h-7 w-28 rounded-full bg-gray-100" />
-              <div className="h-4 w-14 rounded-full bg-gray-100" />
+    <div className="w-full flex flex-col gap-6 font-poppins select-text pb-12 animate-fade-in">
+      
+      {/* Top 4 KPI Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        
+        {/* Card 1: My Current Score */}
+        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex items-center justify-between transition-all hover:shadow-md">
+          <div className="space-y-2 text-left">
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">My Current Score</p>
+            <p className="text-3xl font-black text-gray-900 leading-tight">92.4</p>
+            <div className="flex items-center gap-1 text-[10px] font-bold text-[#008A45]">
+              <TrendingUp className="w-3.5 h-3.5" />
+              <span>+8 From last week</span>
             </div>
           </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function EarningsReportSkeleton() {
-  return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-      <div className="mb-6 flex items-center justify-between">
-        <div className="h-4 w-36 rounded-full bg-gray-100" />
-        <div className="flex items-center gap-4">
-          <div className="h-3 w-28 rounded-full bg-gray-100" />
-          <div className="h-8 w-20 rounded-xl bg-gray-100" />
-        </div>
-      </div>
-      <div className="flex h-64 items-end gap-3 overflow-hidden animate-pulse">
-        {[84, 132, 96, 172, 116, 148, 202, 128, 164, 92, 188, 138].map((height, index) => (
-          <div key={index} className="flex flex-1 items-end gap-1">
-            <div className="w-full rounded-t bg-gray-100" style={{ height }} />
-            <div className="w-full rounded-t bg-gray-100" style={{ height: Math.max(42, height - 38) }} />
+          <div className="w-12 h-12 rounded-full bg-[#D13900] flex items-center justify-center text-white shrink-0 shadow-sm">
+            <Shield className="w-6 h-6 stroke-[1.5]" />
           </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function RecentTransactionsSkeleton() {
-  return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-      <div className="mb-5 flex items-center justify-between">
-        <div className="h-4 w-40 rounded-full bg-gray-100" />
-        <div className="h-3 w-14 rounded-full bg-gray-100" />
-      </div>
-      <div className="hidden animate-pulse md:block">
-        <div className="mb-3 grid grid-cols-5 gap-4 border-b border-[#4CAF50]/30 pb-3">
-          {[0, 1, 2, 3, 4].map((item) => (
-            <div key={item} className="h-3 rounded-full bg-gray-100" />
-          ))}
         </div>
-        {[0, 1, 2, 3, 4].map((row) => (
-          <div key={row} className="grid grid-cols-5 gap-4 border-b border-gray-50 py-3">
-            {[0, 1, 2, 3, 4].map((cell) => (
-              <div key={cell} className="h-4 rounded-full bg-gray-100" />
+
+        {/* Card 2: My Rank */}
+        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex items-center justify-between transition-all hover:shadow-md">
+          <div className="space-y-2 text-left">
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">My Rank</p>
+            <p className="text-3xl font-black text-gray-900 leading-tight">2/48</p>
+            <div className="flex items-center gap-1 text-[10px] font-bold text-[#008A45]">
+              <TrendingUp className="w-3.5 h-3.5" />
+              <span>+8 From last week</span>
+            </div>
+          </div>
+          <div className="w-12 h-12 rounded-full bg-[#D13900] flex items-center justify-center text-white shrink-0 shadow-sm">
+            <TrendingUp className="w-6 h-6 stroke-[1.5]" />
+          </div>
+        </div>
+
+        {/* Card 3: Weekly Progress */}
+        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex items-center justify-between transition-all hover:shadow-md">
+          <div className="space-y-2 text-left">
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Weekly Progress</p>
+            <p className="text-3xl font-black text-gray-900 leading-tight">4/7</p>
+            <p className="text-[10px] font-bold text-gray-400">Not completed yet</p>
+          </div>
+          <div className="w-12 h-12 rounded-full bg-[#FAAD14] flex items-center justify-center text-white shrink-0 shadow-sm">
+            <Trophy className="w-6 h-6 stroke-[1.5]" />
+          </div>
+        </div>
+
+        {/* Card 4: Competition */}
+        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex items-center justify-between transition-all hover:shadow-md">
+          <div className="space-y-2 text-left">
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Competition</p>
+            <p className="text-3xl font-black text-gray-900 leading-tight">Week 23</p>
+            <p className="text-[10px] font-bold text-gray-400">3d 14h left</p>
+          </div>
+          <div className="w-12 h-12 rounded-full bg-[#D13900] flex items-center justify-center text-white shrink-0 shadow-sm">
+            <Flag className="w-6 h-6 stroke-[1.5]" />
+          </div>
+        </div>
+
+      </div>
+
+      {/* Main Section: Chart + My Position */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Performance Trend Area Chart */}
+        <div className="lg:col-span-2 bg-white border border-gray-100 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-4">
+            <div className="text-left">
+              <h3 className="text-base font-black text-gray-900">Performance Trend</h3>
+              <p className="text-xs text-gray-400 font-semibold mt-0.5">Weekly average score</p>
+            </div>
+            
+            {/* Custom timeframe selection dropdown */}
+            <div className="relative">
+              <button 
+                onClick={() => setTimeframeDropdownOpen(!timeframeDropdownOpen)}
+                className="bg-red-50/40 border border-red-100/30 text-[#D13900] hover:bg-red-50/70 font-bold text-xs px-3.5 py-1.5 rounded-full flex items-center gap-1 cursor-pointer transition-colors shadow-sm select-none"
+              >
+                <span>{timeframe}</span>
+                <ChevronDown className={`w-3.5 h-3.5 text-[#D13900] transition-transform duration-200 ${timeframeDropdownOpen ? "rotate-180" : ""}`} />
+              </button>
+              
+              {timeframeDropdownOpen && (
+                <div className="absolute right-0 mt-1.5 bg-white border border-gray-150 rounded-xl shadow-lg py-1.5 z-30 w-32 select-none animate-in fade-in zoom-in-95 duration-100 text-left">
+                  {["last 4 weeks", "last 8 weeks", "last 12 weeks"].map((time) => (
+                    <button
+                      key={time}
+                      onClick={() => {
+                        setTimeframe(time);
+                        setTimeframeDropdownOpen(false);
+                      }}
+                      className={`w-full px-4 py-2 text-left text-xs font-semibold text-gray-600 hover:bg-gray-50 transition-colors ${timeframe === time ? "text-[#D13900] bg-red-50/15" : ""}`}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="w-full pr-4">
+            {mounted ? (
+              <ResponsiveContainer width="100%" height={260}>
+                <AreaChart data={CHART_DATA} margin={{ top: 10, right: 5, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorScore" x1="0" y1="1" x2="0" y2="0">
+                      <stop offset="5%" stopColor="#D13900" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="#D13900" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1F3F5" />
+                  <XAxis 
+                    dataKey="name" 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fill: "#9CA3AF", fontSize: 11, fontWeight: "bold" }}
+                  />
+                  <YAxis 
+                    domain={[70, 90]} 
+                    ticks={[70, 75, 80, 85, 90]} 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fill: "#9CA3AF", fontSize: 11, fontWeight: "bold" }}
+                  />
+                  <Tooltip 
+                    contentStyle={{ background: "#fff", border: "1px solid #F1F3F5", borderRadius: "12px", boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }}
+                    labelStyle={{ fontWeight: "bold", color: "#374151" }}
+                    itemStyle={{ color: "#D13900", fontWeight: "bold" }}
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="score" 
+                    stroke="#D13900" 
+                    strokeWidth={2.5} 
+                    fillOpacity={1} 
+                    fill="url(#colorScore)" 
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-[260px] w-full bg-gray-50/50 animate-pulse rounded-xl" />
+            )}
+          </div>
+        </div>
+
+        {/* My Position mini-leaderboard */}
+        <div className="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+          <div className="text-left mb-4">
+            <h3 className="text-base font-black text-gray-900">My Position</h3>
+          </div>
+
+          {/* Large centered rank text */}
+          <div className="text-center py-2 flex flex-col items-center justify-center">
+            <p className="text-4xl font-black text-[#D13900] leading-none">2nd</p>
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mt-1.5">Out of 48 Drivers</p>
+          </div>
+
+          {/* Mini-leaderboard list */}
+          <div className="space-y-1.5 my-4">
+            {leaders.map((driver, index) => (
+              <div 
+                key={index} 
+                className={`flex items-center justify-between p-2.5 rounded-2xl border transition-all ${
+                  driver.isUser 
+                    ? "bg-red-50/60 border-red-100/50 text-gray-900" 
+                    : "bg-white border-transparent text-gray-700 hover:bg-gray-50/50"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-bold text-gray-400 w-4 text-left">{driver.rank}</span>
+                  
+                  {/* Driver avatar circle with initials */}
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 overflow-hidden ${
+                    driver.isUser ? "bg-[#D13900] text-white" : "bg-gray-100 text-gray-500"
+                  }`}>
+                    {driver.name.split(" ").map(n => n[0]).join("")}
+                  </div>
+                  
+                  <span className={`text-xs font-bold ${driver.isUser ? "text-gray-900" : "text-gray-800"}`}>{driver.name}</span>
+                </div>
+                
+                <div className="text-right">
+                  <p className="text-xs font-black text-gray-900 leading-none">{driver.score}</p>
+                  <p className="text-[9px] font-bold text-[#008A45] mt-1">{driver.change}</p>
+                </div>
+              </div>
             ))}
           </div>
-        ))}
+
+          {/* View Leaderboard button */}
+          <Link 
+            href="/dashboard/driver/leaderboard" 
+            className="w-full py-3 bg-[#D13900] hover:bg-[#b23000] text-white font-extrabold rounded-2xl text-xs text-center transition-all cursor-pointer shadow-sm hover:shadow"
+          >
+            View Leaderboard
+          </Link>
+        </div>
+
       </div>
-      <div className="space-y-4 md:hidden">
-        {[0, 1, 2].map((row) => (
-          <div key={row} className="rounded-xl border border-gray-100 bg-[#FAFAFA] p-4">
-            <div className="animate-pulse space-y-3">
-              <div className="flex justify-between">
-                <div className="h-3 w-24 rounded-full bg-gray-100" />
-                <div className="h-4 w-16 rounded-full bg-gray-100" />
+
+      {/* Bottom Section: Improvement Opportunity, Recent Achievements, Score History */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        {/* Improvement Opportunity */}
+        <div className="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+          <div className="text-left mb-5">
+            <h3 className="text-base font-black text-gray-900">Improvement Opportunity</h3>
+          </div>
+
+          <div className="space-y-4">
+            {/* Safety Score */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center text-[#D13900] shrink-0">
+                  <ShieldAlert className="w-5 h-5 stroke-[1.8]" />
+                </div>
+                <div className="text-left">
+                  <p className="text-xs font-bold text-gray-900">Safety Score</p>
+                  <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Driving safety and compliance</p>
+                </div>
               </div>
-              <div className="h-4 w-3/4 rounded-full bg-gray-100" />
-              <div className="flex justify-between border-t border-gray-50 pt-3">
-                <div className="h-5 w-20 rounded-full bg-gray-100" />
-                <div className="h-5 w-20 rounded-full bg-gray-100" />
+              <div className="text-right font-bold text-[10px] text-gray-500 space-y-0.5">
+                <p><span className="text-gray-400">Current Score -</span> <span className="text-gray-900 font-black">92.4</span></p>
+                <p><span className="text-gray-400">Team Average -</span> <span className="text-gray-900 font-black">86.5</span></p>
+              </div>
+            </div>
+
+            {/* Fuel Efficiency */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center text-[#008A45] shrink-0">
+                  <Gauge className="w-5 h-5 stroke-[1.8]" />
+                </div>
+                <div className="text-left">
+                  <p className="text-xs font-bold text-gray-900">Fuel Efficiency</p>
+                  <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Fuel usage and efficiency</p>
+                </div>
+              </div>
+              <div className="text-right font-bold text-[10px] text-gray-500 space-y-0.5">
+                <p><span className="text-gray-400">Current Score -</span> <span className="text-gray-900 font-black">88.0</span></p>
+                <p><span className="text-gray-400">Team Average -</span> <span className="text-gray-900 font-black">84.2</span></p>
+              </div>
+            </div>
+
+            {/* Attendance */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center text-[#FAAD14] shrink-0">
+                  <Calendar className="w-5 h-5 stroke-[1.8]" />
+                </div>
+                <div className="text-left">
+                  <p className="text-xs font-bold text-gray-900">Attendance</p>
+                  <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Punctuality and availability</p>
+                </div>
+              </div>
+              <div className="text-right font-bold text-[10px] text-gray-500 space-y-0.5">
+                <p><span className="text-gray-400">Current Score -</span> <span className="text-gray-900 font-black">95.0</span></p>
+                <p><span className="text-gray-400">Team Average -</span> <span className="text-gray-900 font-black">91.0</span></p>
+              </div>
+            </div>
+
+            {/* Vehicle Maintenance */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center text-[#D13900] shrink-0">
+                  <Wrench className="w-5 h-5 stroke-[1.8]" />
+                </div>
+                <div className="text-left">
+                  <p className="text-xs font-bold text-gray-900">Vehicle Maintenance</p>
+                  <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Vehicle condition and upkeep</p>
+                </div>
+              </div>
+              <div className="text-right font-bold text-[10px] text-gray-500 space-y-0.5">
+                <p><span className="text-gray-400">Current Score -</span> <span className="text-gray-900 font-black">90.0</span></p>
+                <p><span className="text-gray-400">Team Average -</span> <span className="text-gray-900 font-black">87.8</span></p>
               </div>
             </div>
           </div>
-        ))}
+        </div>
+
+        {/* Recent Achievements */}
+        <div className="bg-white border border-gray-150 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-5">
+            <h3 className="text-base font-black text-gray-900">Recent Achievements</h3>
+            <Link href="/dashboard/driver/performance" className="text-[11px] font-bold text-[#D13900] hover:underline uppercase tracking-wider">
+              View all
+            </Link>
+          </div>
+
+          <div className="space-y-4">
+            {[1, 2, 3, 4].map((item, idx) => (
+              <div key={idx} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-[#FAAD14] flex items-center justify-center text-white shrink-0 shadow-sm">
+                    <Trophy className="w-5 h-5 stroke-[1.8]" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-bold text-gray-900">Top Performer</p>
+                    <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Scored in the top 3 this week</p>
+                  </div>
+                </div>
+                <div className="text-right text-[9px] font-bold text-gray-400 leading-normal">
+                  <p>Earned on</p>
+                  <p className="text-gray-700">May 27, 2024</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Score History */}
+        <div className="bg-white border border-gray-150 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-5">
+            <h3 className="text-base font-black text-gray-900">Score History</h3>
+            <Link href="/dashboard/driver/performance" className="text-[11px] font-bold text-[#D13900] hover:underline uppercase tracking-wider">
+              View all
+            </Link>
+          </div>
+
+          <div className="space-y-4">
+            {[1, 2, 3, 4].map((item, idx) => (
+              <div key={idx} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-[#D13900] flex items-center justify-center text-white shrink-0 shadow-sm">
+                    <Award className="w-5 h-5 stroke-[1.8]" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-bold text-gray-900">Week-24 Challenge</p>
+                    <p className="text-[10px] text-gray-400 font-semibold mt-0.5">248 records - May 19, 2026</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-black text-gray-900">94.8</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
-      <div className="mt-5 flex flex-wrap items-center justify-end gap-2">
-        <div className="h-8 w-16 animate-pulse rounded-lg bg-gray-100" />
-        <div className="flex items-center gap-1.5">
-          {[0, 1, 2].map((item) => (
-            <div key={item} className="h-8 w-8 animate-pulse rounded-lg bg-gray-100" />
-          ))}
-        </div>
-        <div className="h-8 w-16 animate-pulse rounded-lg bg-gray-100" />
-      </div>
-    </div>
-  );
-}
 
-export default function UserDashboardOverview() {
-  const [recentTransactionsPage, setRecentTransactionsPage] = useState(1);
-  const {
-    data,
-    isLoading,
-    isError,
-    refetch,
-  } = useGetUserDashboardQuery({
-    timeframe: "yearly",
-    page: 1,
-    limit: 10,
-  });
-  const {
-    data: transactionsResponse,
-    isLoading: isTransactionsLoading,
-    isFetching: isTransactionsFetching,
-    isError: isTransactionsError,
-    refetch: refetchTransactions,
-  } = useGetTransactionsQuery({
-    page: recentTransactionsPage,
-    limit: 5,
-  });
-  const dashboardData = data?.data;
-  const stats = mapStats(dashboardData);
-  const chartData = mapChart(dashboardData);
-  const recentTransactions = mapTransactionsToRecentRows(transactionsResponse?.data);
-  const recentTransactionsPagination = getTransactionsPagination(transactionsResponse, 5);
-
-  return (
-    <div className="w-full flex flex-col gap-6 font-poppins select-text pb-12">
-      {/* Welcome Banner */}
-       <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">Hello and welcome!</div>
-
-      {isError && (
-        <div className="rounded-2xl border border-red-100 bg-red-50 px-5 py-4 text-sm font-semibold text-red-600">
-          Failed to load dashboard data.
-          <button onClick={() => refetch()} className="ml-2 underline">
-            Retry
-          </button>
-        </div>
-      )}
-
-      {isTransactionsError && (
-        <div className="rounded-2xl border border-red-100 bg-red-50 px-5 py-4 text-sm font-semibold text-red-600">
-          Failed to load recent transactions.
-          <button onClick={() => refetchTransactions()} className="ml-2 underline">
-            Retry
-          </button>
-        </div>
-      )}
-
-      {/* Statistics Cards */}
-      {isLoading ? <StatsGridSkeleton /> : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-         
-      </div>}
-
-      {/* Earnings Report Chart (Full Width) */}
-      {isLoading ? <EarningsReportSkeleton /> : <div>Hello World!</div>}
-
-      {/* Recent Transactions List (Full Width) */}
-      {isTransactionsLoading || isTransactionsFetching ? (
-        <RecentTransactionsSkeleton />
-      ) : (
-        <div>Hello 2!</div>
-      )}
     </div>
   );
 }

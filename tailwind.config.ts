@@ -12,13 +12,13 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-sora)", "sans-serif"],
-        sora: ["var(--font-sora)", "sans-serif"],
-        inter: ["var(--font-inter)"],
-        roboto: ["Roboto", "sans-serif"],
-        poppins: ["Poppins", "sans-serif"],
-        lato: ["Lato", "sans-serif"],
-        sans3: ["Source Sans 3", "sans-serif"],
+        sans: ["var(--font-dm-sans)", "sans-serif"],
+        sora: ["var(--font-dm-sans)", "sans-serif"],
+        inter: ["var(--font-dm-sans)", "sans-serif"],
+        roboto: ["var(--font-dm-sans)", "sans-serif"],
+        poppins: ["var(--font-dm-sans)", "sans-serif"],
+        lato: ["var(--font-dm-sans)", "sans-serif"],
+        sans3: ["var(--font-dm-sans)", "sans-serif"],
         robotomono: ["Roboto Mono", "monospace"]
       },
       colors: {

@@ -209,17 +209,23 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
 
   // Map route pathname to Page Title in Header
   const pageTitle = useMemo(() => {
+    if (role === "driver" && pathname === "/dashboard/driver") {
+      const firstName = displayName ? displayName.split(" ")[0] : "John";
+      return `Welcome Back, ${firstName}!`;
+    }
     if (
       pathname === "/dashboard/user" ||
       pathname === "/dashboard/admin" ||
-      pathname === "/dashboard/company"
+      pathname === "/dashboard/company" ||
+      pathname === "/dashboard/driver"
     )
       return "Overview";
-    if (pathname.includes("/documents")) return "Documents";
-    if (pathname.includes("/transactions")) return "Transactions";
-    if (pathname.includes("/vendors")) return "Vendors";
-    if (pathname.includes("/reports")) return "Reports";
-    if (pathname.includes("/integrations")) return "Integrations";
+    // if (pathname.includes("/documents")) return "Documents";
+    // if (pathname.includes("/transactions")) return "Transactions";
+    // if (pathname.includes("/vendors")) return "Vendors";
+    // if (pathname.includes("/reports")) return "Reports";
+    // if (pathname.includes("/integrations")) return "Integrations";
+    if (pathname.includes("/performance")) return "My Performance";
     if (pathname.includes("/setting") || pathname.includes("/settings"))
       return "Settings";
     if (pathname.includes("/data-upload")) return "Data Upload";
@@ -228,7 +234,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
     if (pathname.includes("/scoring-system")) return "Scoring System";
     if (pathname.includes("/notifications")) return "Notifications";
     return "Dashboard";
-  }, [pathname]);
+  }, [role, pathname, displayName]);
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -258,6 +264,15 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
   };
 
   const pageSubtitle = useMemo(() => {
+    if (role === "driver" && pathname === "/dashboard/driver/leaderboard") {
+      return "Weekly results.";
+    }
+    if (role === "driver" && pathname === "/dashboard/driver/performance") {
+      return "Detailed view of your driving metrics";
+    }
+    if (role === "driver" && pathname === "/dashboard/driver") {
+      return "Track driver performance and safety scores";
+    }
     if (
       role === "company" &&
       (pathname === "/dashboard/company" ||
@@ -292,6 +307,16 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
     return activeCompany?.name || user?.companyName || "Alpha flee.";
   }, [activeCompany, user]);
 
+  const userInitials = useMemo(() => {
+    const name = displayName || "John Doe";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
+  }, [displayName]);
+
   if (isLoading) {
     return null;
   }
@@ -315,17 +340,17 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
             {/* Logo */}
             <div className="flex items-center justify-start px-6 py-5">
               <Link href="/">
-                {role === "company" ? (
+                {role === "company" || role === "driver" ? (
                   <div className="flex items-center gap-2 select-none">
                     <Image
                       src={logoIcon}
                       width={32}
                       height={32}
-                      alt="ScorecardLeague"
+                      alt="DriveScore"
                       className="h-8.5 w-auto"
                     />
                     <span className="text-xl font-bold tracking-tight text-[#D13900] poppins">
-                      Scorecard League
+                      {role === "company" ? "Scorecard League" : "DriveScore"}
                     </span>
                   </div>
                 ) : (
@@ -507,7 +532,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
                   "text-gray-500 hover:bg-gray-50 hover:text-gray-900 border-l-transparent border-l-[5px]";
                 let iconColor = isActive ? "text-[#258200]" : "text-gray-400";
 
-                if (role === "company") {
+                if (role === "company" || role === "driver") {
                   activeStyle =
                     "border border-[#D13900] text-[#D13900] bg-white";
                   inactiveStyle =
@@ -584,10 +609,50 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
               </div>
             )}
 
+            {role === "driver" && (
+              <div className="relative" ref={dropdownRef}>
+                <div
+                  onClick={() => setIsDropdownOpen((open) => !open)}
+                  className="border border-gray-150 bg-white rounded-2xl p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 shadow-sm transition-all select-none"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-[#D13900] flex items-center justify-center font-bold text-white text-xs shrink-0 overflow-hidden">
+                      {userInitials}
+                    </div>
+                    <div className="text-left max-w-[120px]">
+                      <p className="text-xs font-bold text-gray-900 leading-tight truncate">
+                        {displayName || "John."}
+                      </p>
+                    </div>
+                  </div>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 text-[#D13900] transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
+                  />
+                </div>
+
+                {/* Dropdown Menu Overlay for Driver User Menu */}
+                {isDropdownOpen && (
+                  <div className="absolute left-0 right-0 bottom-full mb-1.5 bg-white border border-gray-150 rounded-2xl shadow-xl z-9999 p-2 flex flex-col gap-1 select-none animate-in fade-in slide-in-from-bottom-2 duration-150">
+                    <Link
+                      href="/dashboard/driver/setting"
+                      onClick={() => setIsDropdownOpen(false)}
+                      className="w-full flex items-center gap-2.5 p-2 rounded-xl text-left text-xs font-bold text-gray-600 hover:bg-gray-50/50 hover:text-gray-900"
+                    >
+                      <Settings
+                        size={14}
+                        className="text-gray-400 mr-1 inline"
+                      />
+                      <span>Settings</span>
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
+
             <button
               onClick={handleLogoutClick}
               className={`w-full flex cursor-pointer items-center justify-center gap-3 px-4 py-3.5 rounded-xl text-xs font-bold transition-all ${
-                role === "company"
+                role === "company" || role === "driver"
                   ? "border border-[#D13900] text-[#D13900] bg-white hover:bg-red-50/10"
                   : "text-[#FF3B30] bg-[#FFEBEB] hover:bg-[#FDD8D8]"
               }`}
@@ -668,9 +733,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
             )}
 
             {/* Notification Bell */}
-            {role === "company" && (
+            {(role === "company" || role === "driver") && (
               <Link
-                href="/dashboard/company/notifications"
+                href={
+                  role === "company"
+                    ? "/dashboard/company/notifications"
+                    : "/dashboard/driver/notifications"
+                }
                 className="relative text-gray-400 hover:text-gray-600 cursor-pointer p-1.5 rounded-full hover:bg-gray-50 transition-colors"
               >
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#D13900]" />
@@ -699,7 +768,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
             >
               <div
                 className={`w-8 h-8 rounded-full overflow-hidden flex items-center justify-center cursor-pointer border shadow-sm shrink-0 ${
-                  role === "company"
+                  role === "company" || role === "driver"
                     ? "bg-[#D13900] border-[#D13900] text-white"
                     : "bg-gray-100 border-gray-100 text-gray-700"
                 }`}

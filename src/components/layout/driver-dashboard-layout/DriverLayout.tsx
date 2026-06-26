@@ -2,13 +2,23 @@
 
 import AdminLayout from "@/components/layout/Layout";
 import { ReactNode } from "react";
-import { LayoutDashboard, Settings } from "lucide-react";
+import { LayoutDashboard, BarChart3, Trophy, Settings } from "lucide-react";
 
 const navItems = [
   {
     key: "/dashboard/driver",
-    label: "Dashboard",
+    label: "My Dashboard",
     icon: <LayoutDashboard size={18} />,
+  },
+  {
+    key: "/dashboard/driver/performance",
+    label: "My Performance",
+    icon: <BarChart3 size={18} />,
+  },
+  {
+    key: "/dashboard/driver/leaderboard",
+    label: "Leaderboard",
+    icon: <Trophy size={18} />,
   },
   {
     key: "/dashboard/driver/setting",
@@ -18,7 +28,7 @@ const navItems = [
 ];
 
 const DriverLayout = ({ children }: { children: ReactNode }) => {
-  return <AdminLayout menu={navItems}>{children}</AdminLayout>;
+  return <AdminLayout menu={navItems} role="driver">{children}</AdminLayout>;
 };
 
 export default DriverLayout;

@@ -225,7 +225,7 @@ export default function CompanyDriversPage() {
                 <th className="pb-4 font-black">Company Name</th>
                 <th className="pb-4 font-black">Overall Standing</th>
                 <th className="pb-4 font-black">Overall Score</th>
-                <th className="pb-4 text-right font-black pr-3">Action</th>
+                <th className="pb-4 text-left font-black pr-3">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 text-xs font-semibold text-gray-700">
