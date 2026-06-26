@@ -41,16 +41,16 @@ export default function SettingsPage({ role = "company" }: SettingsPageProps) {
       logoLabel: "Change Photo",
     },
     admin: {
-      color: "#00B2D8",
+      color: "#D13900",
       activeTabClass:
-        "bg-sky-50/50 text-[#00B2D8] border-l-[5px] border-l-[#00B2D8] rounded-r-xl",
+        "bg-red-50/50 text-[#D13900] border-l-[5px] border-l-[#D13900] rounded-r-xl",
       inactiveTabClass:
         "border-l-[5px] border-l-transparent text-gray-500 hover:bg-gray-50/50 hover:text-gray-750",
-      btnClass: "bg-[#00B2D8] hover:bg-[#0092b3] text-white",
+      btnClass: "bg-[#D13900] hover:bg-[#b23000] text-white",
       btnOutlineClass:
-        "border border-[#00B2D8] text-[#00B2D8] hover:bg-sky-50/10",
-      inputFocusClass: "focus:ring-sky-450/30 focus:border-[#00B2D8]",
-      badgeClass: "bg-sky-50 text-[#00B2D8] border border-sky-100/35",
+        "border border-[#D13900] text-[#D13900] hover:bg-red-50/10",
+      inputFocusClass: "focus:ring-red-450/30 focus:border-[#D13900]",
+      badgeClass: "bg-red-50 text-[#D13900] border border-red-100/35",
       logoLabel: "Change Photo",
     },
   };

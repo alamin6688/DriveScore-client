@@ -213,6 +213,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
       const firstName = displayName ? displayName.split(" ")[0] : "John";
       return `Welcome Back, ${firstName}!`;
     }
+    if (role === "admin" && pathname === "/dashboard/admin") {
+      return "Welcome Back, Admin!";
+    }
     if (
       pathname === "/dashboard/user" ||
       pathname === "/dashboard/admin" ||
@@ -225,14 +228,26 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
     // if (pathname.includes("/vendors")) return "Vendors";
     // if (pathname.includes("/reports")) return "Reports";
     // if (pathname.includes("/integrations")) return "Integrations";
+    if (role === "admin" && pathname === "/dashboard/admin/performance") {
+      return "Performance Overview";
+    }
     if (pathname.includes("/performance")) return "My Performance";
     if (pathname.includes("/setting") || pathname.includes("/settings"))
       return "Settings";
     if (pathname.includes("/data-upload")) return "Data Upload";
+    if (pathname.includes("/companies")) return "Companies";
+    if (pathname.includes("/users")) return "User Management";
+    if (pathname.includes("/logs")) return "Activity Logs";
     if (pathname.includes("/drivers")) return "Drivers";
     if (pathname.includes("/leaderboard")) return "Leaderboard";
     if (pathname.includes("/scoring-system")) return "Scoring System";
     if (pathname.includes("/notifications")) return "Notifications";
+    if (pathname.includes("/privacy")) {
+      return pathname.endsWith("/edit") ? "Edit Privacy Policy" : "Privacy Policy";
+    }
+    if (pathname.includes("/terms")) {
+      return pathname.endsWith("/edit") ? "Edit Terms & Conditions" : "Terms & Conditions";
+    }
     return "Dashboard";
   }, [role, pathname, displayName]);
 
@@ -290,6 +305,31 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
     ) {
       return "Define performance categories and set custom weights";
     }
+    if (role === "admin" && pathname === "/dashboard/admin/performance") {
+      return "Trace performances score and trends";
+    }
+    if (role === "admin" && pathname === "/dashboard/admin/logs") {
+      return "Cross-platform KPIs, scoring trends and benchmarking.";
+    }
+    if (role === "admin" && pathname === "/dashboard/admin/users") {
+      return "Manage all users on the platform.";
+    }
+    if (role === "admin" && pathname === "/dashboard/admin/companies") {
+      return "Manage all logistics companies on the platform.";
+    }
+    if (role === "admin" && pathname === "/dashboard/admin") {
+      return "Here's what's happening across the platform.";
+    }
+    if (role === "admin" && pathname.includes("/privacy")) {
+      return pathname.endsWith("/edit")
+        ? "Customize policy content with formatting."
+        : "Manage platform policies.";
+    }
+    if (role === "admin" && pathname.includes("/terms")) {
+      return pathname.endsWith("/edit")
+        ? "Customize terms & conditions with formatting."
+        : "Manage platform terms and conditions.";
+    }
     return null;
   }, [role, pathname]);
 
@@ -340,7 +380,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
             {/* Logo */}
             <div className="flex items-center justify-start px-6 py-5">
               <Link href="/">
-                {role === "company" || role === "driver" ? (
+                {role === "company" || role === "driver" || role === "admin" ? (
                   <div className="flex items-center gap-2 select-none">
                     <Image
                       src={logoIcon}
@@ -532,18 +572,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
                   "text-gray-500 hover:bg-gray-50 hover:text-gray-900 border-l-transparent border-l-[5px]";
                 let iconColor = isActive ? "text-[#258200]" : "text-gray-400";
 
-                if (role === "company" || role === "driver") {
+                if (role === "company" || role === "driver" || role === "admin") {
                   activeStyle =
                     "border border-[#D13900] text-[#D13900] bg-white";
                   inactiveStyle =
                     "border border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-900";
                   iconColor = isActive ? "text-[#D13900]" : "text-gray-400";
-                } else if (role === "admin") {
-                  activeStyle =
-                    "bg-sky-50/80 text-[#00B2D8] border-l-[#00B2D8] border-l-[5px]";
-                  inactiveStyle =
-                    "text-gray-500 hover:bg-gray-50 hover:text-gray-900 border-l-transparent border-l-[5px]";
-                  iconColor = isActive ? "text-[#00B2D8]" : "text-gray-400";
                 }
 
                 return (
@@ -649,10 +683,50 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
               </div>
             )}
 
+            {role === "admin" && (
+              <div className="relative" ref={dropdownRef}>
+                <div
+                  onClick={() => setIsDropdownOpen((open) => !open)}
+                  className="border border-gray-150 bg-white rounded-2xl p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 shadow-sm transition-all select-none"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-[#D13900] flex items-center justify-center font-bold text-white text-xs shrink-0 overflow-hidden">
+                      AK
+                    </div>
+                    <div className="text-left max-w-[120px]">
+                      <p className="text-xs font-bold text-gray-900 leading-tight truncate">
+                        Admin User
+                      </p>
+                    </div>
+                  </div>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 text-[#D13900] transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
+                  />
+                </div>
+
+                {/* Dropdown Menu Overlay for Admin User Menu */}
+                {isDropdownOpen && (
+                  <div className="absolute left-0 right-0 bottom-full mb-1.5 bg-white border border-gray-150 rounded-2xl shadow-xl z-9999 p-2 flex flex-col gap-1 select-none animate-in fade-in slide-in-from-bottom-2 duration-150">
+                    <Link
+                      href="/dashboard/admin/settings"
+                      onClick={() => setIsDropdownOpen(false)}
+                      className="w-full flex items-center gap-2.5 p-2 rounded-xl text-left text-xs font-bold text-gray-600 hover:bg-gray-50/50 hover:text-gray-900"
+                    >
+                      <Settings
+                        size={14}
+                        className="text-gray-400 mr-1 inline"
+                      />
+                      <span>Settings</span>
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
+
             <button
               onClick={handleLogoutClick}
               className={`w-full flex cursor-pointer items-center justify-center gap-3 px-4 py-3.5 rounded-xl text-xs font-bold transition-all ${
-                role === "company" || role === "driver"
+                role === "company" || role === "driver" || role === "admin"
                   ? "border border-[#D13900] text-[#D13900] bg-white hover:bg-red-50/10"
                   : "text-[#FF3B30] bg-[#FFEBEB] hover:bg-[#FDD8D8]"
               }`}
@@ -733,12 +807,14 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
             )}
 
             {/* Notification Bell */}
-            {(role === "company" || role === "driver") && (
+            {(role === "company" || role === "driver" || role === "admin") && (
               <Link
                 href={
                   role === "company"
                     ? "/dashboard/company/notifications"
-                    : "/dashboard/driver/notifications"
+                    : role === "driver"
+                      ? "/dashboard/driver/notifications"
+                      : "/dashboard/admin/notifications"
                 }
                 className="relative text-gray-400 hover:text-gray-600 cursor-pointer p-1.5 rounded-full hover:bg-gray-50 transition-colors"
               >
@@ -768,7 +844,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
             >
               <div
                 className={`w-8 h-8 rounded-full overflow-hidden flex items-center justify-center cursor-pointer border shadow-sm shrink-0 ${
-                  role === "company" || role === "driver"
+                  role === "company" || role === "driver" || role === "admin"
                     ? "bg-[#D13900] border-[#D13900] text-white"
                     : "bg-gray-100 border-gray-100 text-gray-700"
                 }`}
@@ -784,7 +860,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
                   />
                 ) : (
                   <span className="text-xs font-bold select-none">
-                    {role === "company" ? "AK" : fallbackInitial}
+                    {role === "admin" ? "J" : role === "company" ? "AK" : fallbackInitial}
                   </span>
                 )}
               </div>
