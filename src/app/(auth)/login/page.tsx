@@ -13,8 +13,6 @@ import {
   ArrowRight,
   ArrowLeft 
 } from "lucide-react";
-import { useLoginUserMutation, useResendOtpMutation } from "@/service/auth/authApi";
-import { getApiErrorMessage } from "@/utils/getApiErrorMessage";
 import logo from "@/assets/logo/logo.svg";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
@@ -26,26 +24,25 @@ const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const [login, { isLoading }] = useLoginUserMutation();
-  const [resendOtp] = useResendOtpMutation();
+
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const handleQuickLogin = (role: string, redirectPath: string) => {
-    const email = `${role.toLowerCase()}@scorecardleague.com`;
+  const handleQuickLogin = (role: string, redirectPath: string, customEmail?: string) => {
+    const userEmail = customEmail?.trim() || `${role.toLowerCase()}@scorecardleague.com`;
     const name = `Demo ${role.charAt(0) + role.slice(1).toLowerCase()}`;
     
     const header = { alg: "HS256", typ: "JWT" };
     const payload = {
       id: `mock-${role.toLowerCase()}`,
-      email,
+      email: userEmail,
       role,
       name,
       iat: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60, // 24 hours
     };
 
-    const base64Url = (obj: any) => {
+    const base64Url = (obj: Record<string, unknown>) => {
       const str = JSON.stringify(obj);
       return btoa(unescape(encodeURIComponent(str)))
         .replace(/=/g, "")
@@ -83,43 +80,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    try {
-      const payload = { email };
-      const res = await login(payload).unwrap();
-
-      if (res?.success) {
-        if (!res.data) {
-          toast.info(res.message || "Please verify your account.");
-          sessionStorage.setItem("email", email);
-          router.push("/otp");
-          return;
-        }
-
-        // 1. Save temp tokens to sessionStorage for verification recovery
-        sessionStorage.setItem("temp_accessToken", res.data.accessToken);
-        sessionStorage.setItem("temp_refreshToken", res.data.refreshToken);
-        sessionStorage.setItem("email", email);
-
-        // 2. Dispatch OTP code sending
-        try {
-          await resendOtp({ email }).unwrap();
-        } catch (otpErr) {
-          console.error("Failed to send OTP:", otpErr);
-        }
-
-        toast.success("OTP sent to your email. Please verify.");
-        router.push("/otp");
-      }
-    } catch (err: unknown) {
-      console.error("Login failed:", err);
-      toast.error(
-        getApiErrorMessage(
-          err,
-          "An unexpected error occurred. Please try again."
-        )
-      );
-    }
+    handleQuickLogin("COMPANY", "/dashboard/company", email);
   };
 
   return (
@@ -178,7 +139,6 @@ const LoginPage = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-850 placeholder-gray-400 font-medium transition-all"
                   placeholder="Enter your email"
-                  required
                 />
               </div>
             </div>
@@ -197,7 +157,6 @@ const LoginPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-12 pr-12 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent text-sm text-gray-850 placeholder-gray-400 font-medium transition-all"
                   placeholder="Enter Password"
-                  required
                 />
                 <button
                   type="button"
@@ -231,11 +190,10 @@ const LoginPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isLoading}
-              className="w-full py-3.5 rounded-full bg-[#D13900] hover:bg-[#b23000] text-white font-bold transition-all duration-200 shadow-sm hover:shadow flex items-center justify-center gap-2 mt-6 disabled:opacity-75 disabled:pointer-events-none cursor-pointer select-none text-sm"
+              className="w-full py-3.5 rounded-full bg-[#D13900] hover:bg-[#b23000] text-white font-bold transition-all duration-200 shadow-sm hover:shadow flex items-center justify-center gap-2 mt-6 cursor-pointer select-none text-sm"
             >
-              <span>{isLoading ? "Logging In..." : "Log In"}</span>
-              {!isLoading && <ArrowRight className="w-4.5 h-4.5 stroke-[2.5]" />}
+              <span>Log In</span>
+              <ArrowRight className="w-4.5 h-4.5 stroke-[2.5]" />
             </button>
 
           </form>

@@ -26,9 +26,8 @@ const HeroSection = () => {
 
         {/* Sub-headline */}
         <p className="text-sm sm:text-base md:text-lg lg:text-[18px] leading-relaxed text-gray-500 max-w-3xl mb-12 select-text font-normal px-2 sm:px-0">
-          Upload your Excel, let us calculate scores, watch your team compete
-          every week <br className="hidden md:inline" />
-          on a live leaderboard.
+
+          Upload your scorecard data via excel, set your custom metric weights, let us calculate the scores, watch your team compete each week on a live scoreboard.
         </p>
 
         {/* Action Buttons */}

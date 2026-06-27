@@ -25,7 +25,6 @@ export default function AdminTermsConditionsPage() {
     <div className="max-w-4xl mx-auto pb-12 select-text">
       {/* Terms Card Wrapper */}
       <div className="bg-white rounded-[32px] p-6 sm:p-10 border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.015)] relative">
-        
         {/* Card Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-gray-100">
           <div>
@@ -33,7 +32,8 @@ export default function AdminTermsConditionsPage() {
               Terms & Conditions
             </h1>
             <p className="text-sm text-gray-500 font-medium mt-1">
-              Please read these terms carefully before using the DriveScore platform.
+              Please read these terms carefully before using the ScorecardLeague
+              platform.
             </p>
           </div>
           <Link
@@ -45,9 +45,9 @@ export default function AdminTermsConditionsPage() {
         </div>
 
         {/* Dynamic Parsed Rich Text Content */}
-        <div 
-          className="rich-text-content" 
-          dangerouslySetInnerHTML={{ __html: content }} 
+        <div
+          className="rich-text-content"
+          dangerouslySetInnerHTML={{ __html: content }}
         />
       </div>
     </div>

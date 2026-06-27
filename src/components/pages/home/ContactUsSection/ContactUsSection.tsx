@@ -82,7 +82,7 @@ export default function ContactUsSection() {
             className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-xl border border-black bg-white text-xs sm:text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors shadow-sm select-none"
           >
             <Mail className="w-4 h-4 text-gray-400" />
-            <span>Email : [EMAIL_ADDRESS]</span>
+            <span>Email : hello@scorecardleague.com </span>
           </a>
           <a
             href="tel:27874387637"

@@ -45,7 +45,7 @@ export default function Footer() {
                 </span>
               </Link>
               <p className="text-sm text-[#A0A3A6] leading-relaxed font-normal max-w-sm">
-                Upload your Excel, let us calculate scores, watch your team compete every week on a live leaderboard.
+                Upload your scorecard data via excel, set your custom metric weights, let us calculate the scores, watch your team compete each week on a live scoreboard.
               </p>
             </div>
 

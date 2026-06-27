@@ -25,7 +25,6 @@ export default function TermsPage() {
   return (
     <div className="bg-[#f8f9fa] min-h-screen py-16 sm:py-24 select-text">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-        
         {/* Back Link */}
         <Link
           href="/"
@@ -43,17 +42,17 @@ export default function TermsPage() {
               Terms & Conditions
             </h1>
             <p className="text-sm sm:text-base text-gray-500 leading-relaxed font-medium">
-              Please read these terms carefully before using the DriveScore platform.
+              Please read these terms carefully before using the ScorecardLeague
+              platform.
             </p>
           </div>
 
           {/* Dynamic Rich Text Content */}
-          <div 
-            className="rich-text-content" 
-            dangerouslySetInnerHTML={{ __html: content }} 
+          <div
+            className="rich-text-content"
+            dangerouslySetInnerHTML={{ __html: content }}
           />
         </div>
-
       </div>
     </div>
   );

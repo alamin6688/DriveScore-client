@@ -185,7 +185,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
       await refetchCompanies();
       setOptimisticCompanyId(null);
       setSwitchingCompanyId(null);
-      setIsDropdownOpen(false);
+      // setIsDropdownOpen(false);
       appAlert.fire({
         icon: "success",
         title: `Switched to ${companyName}`,
@@ -243,10 +243,14 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
     if (pathname.includes("/scoring-system")) return "Scoring System";
     if (pathname.includes("/notifications")) return "Notifications";
     if (pathname.includes("/privacy")) {
-      return pathname.endsWith("/edit") ? "Edit Privacy Policy" : "Privacy Policy";
+      return pathname.endsWith("/edit")
+        ? "Edit Privacy Policy"
+        : "Privacy Policy";
     }
     if (pathname.includes("/terms")) {
-      return pathname.endsWith("/edit") ? "Edit Terms & Conditions" : "Terms & Conditions";
+      return pathname.endsWith("/edit")
+        ? "Edit Terms & Conditions"
+        : "Terms & Conditions";
     }
     return "Dashboard";
   }, [role, pathname, displayName]);
@@ -386,11 +390,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
                       src={logoIcon}
                       width={32}
                       height={32}
-                      alt="DriveScore"
+                      alt="ScorecardLeague"
                       className="h-8.5 w-auto"
                     />
                     <span className="text-xl font-bold tracking-tight text-[#D13900] poppins">
-                      {role === "company" ? "Scorecard League" : "DriveScore"}
+                      {role === "company"
+                        ? "Scorecard League"
+                        : "ScorecardLeague"}
                     </span>
                   </div>
                 ) : (
@@ -409,7 +415,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
             {isUserDashboardRoute && (
               <div className="px-4 mb-4 relative" ref={dropdownRef}>
                 <div
-                  onClick={() => setIsDropdownOpen((open) => !open)}
+                  // onClick={() => setIsDropdownOpen((open) => !open)}
                   className="border border-gray-100 bg-white rounded-2xl p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 shadow-sm transition-all select-none"
                 >
                   <div className="flex items-center gap-2.5">
@@ -545,7 +551,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
                     <div className="border-t border-gray-50 mt-1 pt-1.5 px-1">
                       <Link
                         href="/dashboard/user/setting?tab=company"
-                        onClick={() => setIsDropdownOpen(false)}
+                        // onClick={() => setIsDropdownOpen(false)}
                         className="w-full flex items-center justify-center gap-1 py-1.5 rounded-lg border border-dashed border-gray-250 hover:border-[#4CAF50] text-[10px] font-bold text-gray-505 hover:text-[#4CAF50] transition-all cursor-pointer"
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -572,7 +578,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
                   "text-gray-500 hover:bg-gray-50 hover:text-gray-900 border-l-transparent border-l-[5px]";
                 let iconColor = isActive ? "text-[#258200]" : "text-gray-400";
 
-                if (role === "company" || role === "driver" || role === "admin") {
+                if (
+                  role === "company" ||
+                  role === "driver" ||
+                  role === "admin"
+                ) {
                   activeStyle =
                     "border border-[#D13900] text-[#D13900] bg-white";
                   inactiveStyle =
@@ -600,7 +610,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
           <div className="px-4 space-y-3">
             {role === "company" && (
               <div className="relative" ref={dropdownRef}>
-                <div
+                {/* <div
                   onClick={() => setIsDropdownOpen((open) => !open)}
                   className="border border-gray-150 bg-white rounded-2xl p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 shadow-sm transition-all select-none"
                 >
@@ -617,7 +627,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
                   <ChevronDown
                     className={`w-3.5 h-3.5 text-gray-400 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
                   />
-                </div>
+                </div> */}
 
                 {/* Dropdown Menu Overlay for Company Switcher */}
                 {isDropdownOpen && (
@@ -750,7 +760,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
 
         {/* Header Bar */}
         <Header
-          className={`bg-white px-6 border-b border-gray-100 flex items-center justify-between shrink-0 ${pageSubtitle ? "h-20 py-3" : "h-16 py-4"}`}
+          style={{ lineHeight: "normal" }}
+          className={`bg-white px-4 sm:px-6 border-b border-gray-100 flex items-center justify-between shrink-0 ${
+            pageSubtitle ? "h-auto min-h-[80px] py-4" : "h-16 py-4"
+          }`}
         >
           <div className="flex flex-col justify-center text-left">
             <h2 className="text-lg font-bold text-gray-900 leading-tight truncate">
@@ -794,7 +807,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
             {/* Refresh Button */}
             <button
               onClick={() => window.location.reload()}
-              className="flex cursor-pointer items-center gap-1.5 px-2.5 sm:px-3 py-1.5 border border-gray-200 hover:bg-gray-50 rounded-xl text-xs font-semibold text-gray-500 transition-colors"
+              className="md:flex cursor-pointer items-center gap-1.5 px-2.5 sm:px-3 py-1.5 border border-gray-200 hover:bg-gray-50 rounded-xl text-xs font-semibold text-gray-500 transition-colors hidden"
             >
               <span className="hidden sm:inline">Refresh</span>
               <RefreshCw className="w-3.5 h-3.5" />
@@ -860,7 +873,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
                   />
                 ) : (
                   <span className="text-xs font-bold select-none">
-                    {role === "admin" ? "J" : role === "company" ? "AK" : fallbackInitial}
+                    {role === "admin"
+                      ? "J"
+                      : role === "company"
+                        ? "AK"
+                        : fallbackInitial}
                   </span>
                 )}
               </div>
