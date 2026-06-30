@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import dashboardMockup from "@/assets/images/heroSectionImage.png";
+import mobileMockup from "@/assets/images/mobileHeroSectionImage.png";
 
 const HeroSection = () => {
   return (
@@ -47,16 +48,29 @@ const HeroSection = () => {
         </div>
 
         {/* Mockup Dashboard Image (2nd Half) */}
-        <div className="mt-16 max-w-7xl mx-auto relative z-10 flex justify-center">
+        <div className="mt-16 max-w-7xl mx-auto relative z-10 flex flex-col items-center md:flex-row md:items-end justify-center gap-6 w-full">
           {/* Subtle Orange-Red Brand Radial Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-[#D13900]/10 rounded-full blur-3xl opacity-60 pointer-events-none -z-10" />
 
-          <Image
-            src={dashboardMockup}
-            alt="Scorecard League Dashboard Mockup"
-            className="w-full h-auto object-contain"
-            priority
-          />
+          {/* Desktop Dashboard Mockup: Hidden on mobile (< md), visible on md+ */}
+          <div className="hidden md:block md:w-[70%] lg:w-[73%] shrink-0">
+            <Image
+              src={dashboardMockup}
+              alt="Scorecard League Dashboard Mockup"
+              className="w-full h-auto object-contain"
+              priority
+            />
+          </div>
+
+          {/* Mobile Dashboard Mockup: Always visible (centered on mobile, next to desktop on md+) */}
+          <div className="w-[80%] sm:w-[55%] md:w-[28%] lg:w-[25%] shrink-0">
+            <Image
+              src={mobileMockup}
+              alt="Scorecard League Mobile Dashboard Mockup"
+              className="w-full h-auto object-contain"
+              priority
+            />
+          </div>
         </div>
       </div>
     </div>
