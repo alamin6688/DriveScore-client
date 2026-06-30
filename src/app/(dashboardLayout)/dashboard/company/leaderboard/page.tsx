@@ -738,34 +738,34 @@ export default function CompanyLeaderboardPage() {
         <div className="overflow-x-auto w-full -mx-6 px-6">
           <table className="w-full text-left border-collapse min-w-[1800px]">
             <thead>
-              <tr className="border-b border-gray-100 text-[10px] sm:text-xs font-black text-gray-400 uppercase tracking-wider">
-                <th className="pb-4 font-black">Rank</th>
-                <th className="pb-4 font-black">Driver Name</th>
-                <th className="pb-4 font-black">Company Name</th>
-                <th className="pb-4 font-black">Overall Standing</th>
-                <th className="pb-4 font-black text-right pr-2">Speeding</th>
-                <th className="pb-4 font-black text-right pr-2">
+              <tr className="border-b border-gray-100 text-[10px] sm:text-xs font-black text-black/80  tracking-wider">
+                <th className="pb-4 font-black text-center pr-2">Rank</th>
+                <th className="pb-4 font-black text-center pr-2">Driver Name</th>
+                <th className="pb-4 font-black text-center pr-2">Company Name</th>
+                <th className="pb-4 font-black text-center pr-2">Overall Standing</th>
+                <th className="pb-4 font-black text-center pr-2">Speeding</th>
+                <th className="pb-4 font-black text-center pr-2">
                   Seatbelt Off
                 </th>
-                <th className="pb-4 font-black text-right pr-2">
+                <th className="pb-4 font-black text-center pr-2">
                   Distractions
                 </th>
-                <th className="pb-4 font-black text-right pr-2">
+                <th className="pb-4 font-black text-center pr-2">
                   Signal Violations
                 </th>
-                <th className="pb-4 font-black text-right pr-2">
+                <th className="pb-4 font-black text-center pr-2">
                   Following Distance
                 </th>
-                <th className="pb-4 font-black text-right pr-2">(CDF)</th>
-                <th className="pb-4 font-black text-right pr-2">(DPMO)</th>
-                <th className="pb-4 font-black text-right pr-2">(DSB)</th>
-                <th className="pb-4 font-black text-right pr-2">POD</th>
-                <th className="pb-4 font-black text-right pr-2">
+                <th className="pb-4 font-black text-center pr-2">(CDF)</th>
+                <th className="pb-4 font-black text-center pr-2">(DPMO)</th>
+                <th className="pb-4 font-black text-center pr-2">(DSB)</th>
+                <th className="pb-4 font-black text-center pr-2">POD</th>
+                <th className="pb-4 font-black text-center pr-2">
                   Package Delivered
                 </th>
-                <th className="pb-4 font-black text-right pr-2">Safety</th>
-                <th className="pb-4 font-black text-right pr-2">Quality</th>
-                <th className="pb-4 font-black text-right pr-2">
+                <th className="pb-4 font-black text-center pr-2">Safety</th>
+                <th className="pb-4 font-black text-center pr-2">Quality</th>
+                <th className="pb-4 font-black text-center pr-2">
                   Overall Score
                 </th>
                 <th className="pb-4 text-center font-black">Action</th>
@@ -778,12 +778,12 @@ export default function CompanyLeaderboardPage() {
                   className="hover:bg-gray-50/50 transition-colors"
                 >
                   {/* Rank */}
-                  <td className="py-4 font-bold text-gray-550">
+                  <td className="py-4 font-bold text-gray-550 text-center">
                     {driver.rank}
                   </td>
                   {/* Name */}
-                  <td className="py-4">
-                    <div className="flex items-center gap-2.5">
+                  <td className="py-4 text-center">
+                    <div className="flex items-center gap-2.5 justify-center">
                       <div className="w-8 h-8 rounded-full bg-gray-200 text-gray-500 text-xs font-bold flex items-center justify-center shrink-0">
                         {driver.name
                           .split(" ")
@@ -799,9 +799,9 @@ export default function CompanyLeaderboardPage() {
                     </div>
                   </td>
                   {/* Company */}
-                  <td className="py-4 text-gray-505">{driver.company}</td>
+                  <td className="py-4 text-gray-555 text-center">{driver.company}</td>
                   {/* Standing */}
-                  <td className="py-4">
+                  <td className="py-4 text-center">
                     <span
                       className={`inline-flex px-3 py-1 rounded-full text-[10px] font-bold ${
                         driver.standing === "Platinum"
@@ -813,57 +813,57 @@ export default function CompanyLeaderboardPage() {
                     </span>
                   </td>
                   {/* Speeding */}
-                  <td className="py-4 text-right pr-2 font-black text-gray-900">
+                  <td className="py-4 text-center pr-2 font-black text-gray-700">
                     {driver.speeding}
                   </td>
                   {/* Seatbelt Off */}
-                  <td className="py-4 text-right pr-2 font-black text-gray-900">
+                  <td className="py-4 text-center pr-2 font-black text-gray-700">
                     {driver.seatbeltOff}
                   </td>
                   {/* Distractions */}
-                  <td className="py-4 text-right pr-2 font-black text-gray-900">
+                  <td className="py-4 text-center pr-2 font-black text-gray-700">
                     {driver.distractions}
                   </td>
                   {/* Signal Violations */}
-                  <td className="py-4 text-right pr-2 font-black text-gray-900">
+                  <td className="py-4 text-center pr-2 font-black text-gray-700">
                     {driver.signalViolations}
                   </td>
                   {/* Following Distance */}
-                  <td className="py-4 text-right pr-2 font-black text-gray-900">
+                  <td className="py-4 text-center pr-2 font-black text-gray-700">
                     {driver.followingDistance}
                   </td>
                   {/* CDF */}
-                  <td className="py-4 text-right pr-2 font-black text-gray-900">
+                  <td className="py-4 text-center pr-2 font-black text-gray-700">
                     {driver.cdf}
                   </td>
                   {/* DPMO */}
-                  <td className="py-4 text-right pr-2 font-black text-gray-900">
+                  <td className="py-4 text-center pr-2 font-black text-gray-700">
                     {driver.dpmo}
                   </td>
                   {/* DSB */}
-                  <td className="py-4 text-right pr-2 font-black text-gray-900">
+                  <td className="py-4 text-center pr-2 font-black text-gray-700">
                     {driver.dsb}
                   </td>
                   {/* POD */}
-                  <td className="py-4 text-right pr-2 font-black text-gray-900">
+                  <td className="py-4 text-center pr-2 font-black text-gray-700">
                     {driver.pod}
                   </td>
                   {/* Package Delivered */}
-                  <td className="py-4 text-right pr-2 font-black text-gray-900">
+                  <td className="py-4 text-center pr-2 font-black text-gray-700">
                     {driver.packageDelivered}
                   </td>
                   {/* Safety */}
-                  <td className="py-4 text-right pr-2 font-black text-gray-900">
+                  <td className="py-4 text-center pr-2 font-black text-gray-700">
                     {driver.safety}
                   </td>
                   {/* Quality */}
-                  <td className="py-4 text-right pr-2 font-black text-gray-900">
+                  <td className="py-4 text-center pr-2 font-black text-gray-700">
                     {driver.quality}
                   </td>
                   {/* Overall Score */}
-                  <td className="py-4">
-                    <div className="flex items-center justify-end gap-2 pr-2">
-                      <span className="font-black text-gray-900">
+                  <td className="py-4 text-center">
+                    <div className="flex items-center justify-center gap-2 pr-2">
+                      <span className="font-black text-gray-700">
                         {driver.overallScore}
                       </span>
                       <div
@@ -882,7 +882,7 @@ export default function CompanyLeaderboardPage() {
                   <td className="py-4 text-center">
                     <button
                       onClick={() => handleOpenViewDetails(driver)}
-                      className="w-7 h-7 rounded-full border border-gray-200 hover:bg-gray-50 text-gray-400 hover:text-gray-650 flex items-center justify-center cursor-pointer transition-colors align-middle mx-auto"
+                      className="w-7 h-7 rounded-full border border-gray-200 hover:bg-gray-50 text-gray-700 hover:text-gray-655 flex items-center justify-center cursor-pointer transition-colors align-middle mx-auto"
                     >
                       <Eye className="w-4 h-4" />
                     </button>
