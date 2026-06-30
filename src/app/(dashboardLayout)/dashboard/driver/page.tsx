@@ -272,71 +272,88 @@ export default function DriverDashboardOverview() {
           </div>
 
           <div className="space-y-4">
-            {/* Safety Score */}
+            {/* Speeding */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center text-[#D13900] shrink-0">
-                  <ShieldAlert className="w-5 h-5 stroke-[1.8]" />
+                <div className="w-10 h-10 rounded-2xl bg-[#FFEBEB] flex items-center justify-center text-[#FF3B30] shrink-0">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M12 2a10 10 0 0 1 10 10h-2a8 8 0 0 0-16 0H2A10 10 0 0 1 12 2z" />
+                    <path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0" />
+                    <path d="M12 10l5-4" />
+                  </svg>
                 </div>
                 <div className="text-left">
-                  <p className="text-xs font-bold text-gray-900">Safety Score</p>
-                  <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Driving safety and compliance</p>
+                  <p className="text-xs font-bold text-gray-900 leading-tight">Speeding</p>
+                  <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Speeding incidents</p>
                 </div>
               </div>
-              <div className="text-right font-bold text-[10px] text-gray-500 space-y-0.5">
-                <p><span className="text-gray-400">Current Score -</span> <span className="text-gray-900 font-black">92.4</span></p>
-                <p><span className="text-gray-400">Team Average -</span> <span className="text-gray-900 font-black">86.5</span></p>
+              <div className="text-right font-medium text-[10px] text-gray-500 space-y-0.5">
+                <p><span className="text-gray-400">Current Score -</span> <span className="text-gray-900 font-black">30</span></p>
+                <p><span className="text-gray-400">Team Average -</span> <span className="text-gray-900 font-black">40</span></p>
               </div>
             </div>
 
-            {/* Fuel Efficiency */}
+            {/* Seatbelt Off */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center text-[#008A45] shrink-0">
-                  <Gauge className="w-5 h-5 stroke-[1.8]" />
+                <div className="w-10 h-10 rounded-2xl bg-[#E6F7F0] flex items-center justify-center text-[#008A45] shrink-0">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M18 3L6 21" />
+                    <rect x="9" y="10" width="6" height="8" rx="1" />
+                    <circle cx="12" cy="6" r="3" />
+                  </svg>
                 </div>
                 <div className="text-left">
-                  <p className="text-xs font-bold text-gray-900">Fuel Efficiency</p>
-                  <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Fuel usage and efficiency</p>
+                  <p className="text-xs font-bold text-gray-900 leading-tight">Seatbelt Off</p>
+                  <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Seatbelt off incidents</p>
                 </div>
               </div>
-              <div className="text-right font-bold text-[10px] text-gray-500 space-y-0.5">
-                <p><span className="text-gray-400">Current Score -</span> <span className="text-gray-900 font-black">88.0</span></p>
-                <p><span className="text-gray-400">Team Average -</span> <span className="text-gray-900 font-black">84.2</span></p>
+              <div className="text-right font-medium text-[10px] text-gray-500 space-y-0.5">
+                <p><span className="text-gray-400">Current Score -</span> <span className="text-gray-900 font-black">30</span></p>
+                <p><span className="text-gray-400">Team Average -</span> <span className="text-gray-900 font-black">40</span></p>
               </div>
             </div>
 
-            {/* Attendance */}
+            {/* Distractions */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center text-[#FAAD14] shrink-0">
-                  <Calendar className="w-5 h-5 stroke-[1.8]" />
+                <div className="w-10 h-10 rounded-2xl bg-[#FFEBEB] flex items-center justify-center text-[#FF3B30] shrink-0">
+                  <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                    <line x1="12" y1="9" x2="12" y2="13" stroke="white" strokeWidth="2" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" stroke="white" strokeWidth="3" />
+                  </svg>
                 </div>
                 <div className="text-left">
-                  <p className="text-xs font-bold text-gray-900">Attendance</p>
-                  <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Punctuality and availability</p>
+                  <p className="text-xs font-bold text-gray-900 leading-tight">Distractions</p>
+                  <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Distracted driving incidents</p>
                 </div>
               </div>
-              <div className="text-right font-bold text-[10px] text-gray-500 space-y-0.5">
-                <p><span className="text-gray-400">Current Score -</span> <span className="text-gray-900 font-black">95.0</span></p>
-                <p><span className="text-gray-400">Team Average -</span> <span className="text-gray-900 font-black">91.0</span></p>
+              <div className="text-right font-medium text-[10px] text-gray-500 space-y-0.5">
+                <p><span className="text-gray-400">Current Score -</span> <span className="text-gray-900 font-black">30</span></p>
+                <p><span className="text-gray-400">Team Average -</span> <span className="text-gray-900 font-black">40</span></p>
               </div>
             </div>
 
-            {/* Vehicle Maintenance */}
+            {/* Delivery Completion (DPMO) */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center text-[#D13900] shrink-0">
-                  <Wrench className="w-5 h-5 stroke-[1.8]" />
+                <div className="w-10 h-10 rounded-2xl bg-[#E6F7F0] flex items-center justify-center text-[#008A45] shrink-0">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <circle cx="8" cy="19" r="2" />
+                    <circle cx="18" cy="19" r="2" />
+                    <path d="M5 6h15l-1.5 9H6.5L4 2H2" />
+                    <path d="M9 9h6v3H9z" fill="currentColor" />
+                  </svg>
                 </div>
                 <div className="text-left">
-                  <p className="text-xs font-bold text-gray-900">Vehicle Maintenance</p>
-                  <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Vehicle condition and upkeep</p>
+                  <p className="text-xs font-bold text-gray-900 leading-tight">Delivery Completion (DPMO)</p>
+                  <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Defects per million opportunities</p>
                 </div>
               </div>
-              <div className="text-right font-bold text-[10px] text-gray-500 space-y-0.5">
-                <p><span className="text-gray-400">Current Score -</span> <span className="text-gray-900 font-black">90.0</span></p>
-                <p><span className="text-gray-400">Team Average -</span> <span className="text-gray-900 font-black">87.8</span></p>
+              <div className="text-right font-medium text-[10px] text-gray-500 space-y-0.5">
+                <p><span className="text-gray-400">Current Score -</span> <span className="text-gray-900 font-black">30</span></p>
+                <p><span className="text-gray-400">Team Average -</span> <span className="text-gray-900 font-black">40</span></p>
               </div>
             </div>
           </div>
