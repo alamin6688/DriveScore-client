@@ -20,6 +20,7 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from "recharts";
+import Link from "next/link";
  
 // Mock data for weekly average scores trend chart
 const weeklyTrendData = [
@@ -225,7 +226,9 @@ export default function CompanyDashboardOverview() {
         <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <h4 className="text-sm sm:text-base font-bold text-[#008A45]">Top Performers</h4>
+            <Link href="/dashboard/company/leaderboard">
             <button className="text-xs font-bold text-[#D13900] hover:underline cursor-pointer">View all</button>
+            </Link>
           </div>
           
           <div className="divide-y divide-gray-50">
@@ -264,7 +267,9 @@ export default function CompanyDashboardOverview() {
         <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <h4 className="text-sm sm:text-base font-bold text-[#D13900]">Less Performers</h4>
+            <Link href="/dashboard/company/leaderboard">
             <button className="text-xs font-bold text-[#D13900] hover:underline cursor-pointer">View all</button>
+            </Link>
           </div>
  
           <div className="divide-y divide-gray-50">
