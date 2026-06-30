@@ -346,9 +346,6 @@ export default function DriverDashboardOverview() {
         <div className="bg-white border border-gray-150 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between mb-5">
             <h3 className="text-base font-black text-gray-900">Recent Achievements</h3>
-            <Link href="/dashboard/driver/performance" className="text-[11px] font-bold text-[#D13900] hover:underline uppercase tracking-wider">
-              View all
-            </Link>
           </div>
 
           <div className="space-y-4">

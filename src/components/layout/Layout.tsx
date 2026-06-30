@@ -9,12 +9,6 @@ import {
   LogOut,
   ChevronDown,
   RefreshCw,
-  LayoutDashboard,
-  FileText,
-  ArrowLeftRight,
-  Building2,
-  BarChart3,
-  Link as LinkIcon,
   Settings,
   Power,
   Plus,
@@ -284,7 +278,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, menu, role }) => {
 
   const pageSubtitle = useMemo(() => {
     if (role === "driver" && pathname === "/dashboard/driver/leaderboard") {
-      return "Weekly results.";
+      return "Top Performers";
     }
     if (role === "driver" && pathname === "/dashboard/driver/performance") {
       return "Detailed view of your driving metrics";
